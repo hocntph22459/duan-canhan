@@ -17,7 +17,7 @@ const ContactModel = new mongoose.Schema({
         type: String,
         require: true
     },
-    content: {
+    support: {
         type: String,
         require: true
     }

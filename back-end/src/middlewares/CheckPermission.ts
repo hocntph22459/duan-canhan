@@ -9,7 +9,7 @@ export const checkPermission = async (req, res, next) => {
 
         // lấy jwt token từ header
         const token = req.headers.authorization.split(" ")[1];
-        jwt.verify(token, "banThayDat", async (err, payload) => {
+        jwt.verify(token, "hocclnh", async (err, payload) => {
             if (err) {
                 if (err.name === "JsonWebTokenError") {
                     return res.json({

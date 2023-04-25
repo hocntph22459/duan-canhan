@@ -4,6 +4,9 @@ interface IContact {
     email: string,
     phone: number,
     address: string,
-    content:string
+    content:string,
+    createdAt?: Date;
+    updatedAt?: Date;
+    deletedAt?: Date | null,
 }
 export default IContact

@@ -2,8 +2,9 @@ import User from "../models/user";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { signinSchema, signupSchema } from "../validates/auth";
+import IUser from "../interfaces/user";
 
-export const signup = async (req, res) => {
+export const Signup = async (req, res) => {
     try {
         const { name, email, password } = req.body;
 
@@ -17,20 +18,20 @@ export const signup = async (req, res) => {
         const userExists = await User.findOne({ email });
         if (userExists) {
             return res.status(400).json({
-                message: "User already exists",
+                message: "Tài khoản đã tồn tại",
             });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const user = await User.create({
+        const user:any = await User.create({
             name,
             email,
             password: hashedPassword,
         });
         user.password = undefined;
         return res.status(201).json({
-            message: "User created successfully",
+            message: "Đăng ký thành công",
             user,
         });
     } catch (error) {
@@ -40,7 +41,7 @@ export const signup = async (req, res) => {
     }
 };
 
-export const signin = async (req, res) => {
+export const Signin = async (req, res) => {
     try {
         const { email, password } = req.body;
 
@@ -53,7 +54,7 @@ export const signin = async (req, res) => {
             });
         }
 
-        const user = await User.findOne({ email });
+        const user:any = await User.findOne({ email });
         if (!user) {
             return res.status(400).json({
                 message: "Tài khoản không tồn tại",
@@ -62,10 +63,10 @@ export const signin = async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({
-                message: "Khong dung mat khau",
+                message: "Không đúng mật khẩu",
             });
         }
-        const token = jwt.sign({ _id: user._id }, "banThayDat", { expiresIn: "1h" });
+        const token = jwt.sign({ _id: user._id }, "hocclnh", { expiresIn: "1h" });
 
         user.password = undefined;
 

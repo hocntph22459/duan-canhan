@@ -1,11 +1,12 @@
 import express from "express";
-import { create, get, getAll, remove, update } from "../controllers/contact";
+import { checkPermission } from "../middlewares/CheckPermission";
+import { createContact, getAllContact, getOneContact, removeContact, updateContact } from "../controllers/contact";
 const RouterContact = express.Router();
 
-RouterContact.get("/", getAll);
-RouterContact.get("/:id", get);
-RouterContact.post("/", create);
-RouterContact.patch("/:id", update);
-RouterContact.delete("/:id", remove);
+RouterContact.get("/", getAllContact);
+RouterContact.get("/:id", getOneContact);
+RouterContact.post("/", createContact);
+RouterContact.put("/:id",checkPermission, updateContact);
+RouterContact.delete("/:id",checkPermission, removeContact);
 
 export default RouterContact;

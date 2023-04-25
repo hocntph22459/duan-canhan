@@ -25,7 +25,7 @@ import Category from "../models/category";
 //     }
 // };
 
-export const getAll = async (req, res) => {
+export const getAllPost = async (req, res) => {
     try {
         const post = await Post.find()
         if (post.length === 0) {
@@ -44,9 +44,9 @@ export const getAll = async (req, res) => {
     }
 };
 
-export const get = async function (req, res) {
+export const getOnePost = async function (req, res) {
     try {
-        const post = await Post.findById(req.params.id).populate("CategoryId").populate("Comments")
+        const post = await Post.findById(req.params.id).populate("CategoryId","posts").populate("Comments")
         if (!post) {
             return res.status(400).json({
                 message: "Không có bài viết nào",
@@ -62,7 +62,7 @@ export const get = async function (req, res) {
         });
     }
 };
-export const create = async function (req, res) {
+export const createPost = async function (req, res) {
     try {
         const post = await Post.create(req.body);
         if (!post) {
@@ -85,7 +85,7 @@ export const create = async function (req, res) {
         });
     }
 };
-export const update = async function (req, res) {
+export const updatePost = async function (req, res) {
     try {
         const post = await Post.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!post) {
@@ -103,7 +103,7 @@ export const update = async function (req, res) {
         });
     }
 };
-export const remove = async function (req, res) {
+export const removePost = async function (req, res) {
     try {
         const post = await Post.findByIdAndDelete(req.params.id);
         return res.status(200).json({

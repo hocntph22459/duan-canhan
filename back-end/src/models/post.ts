@@ -36,10 +36,12 @@ const PostModel = new mongoose.Schema({
             ref:"Comment"
         }
     ],
-    CategoryId: {
-        type: mongoose.Types.ObjectId,
-        ref: "Category"
-    }
+    CategoryId: [
+        {
+            type: mongoose.Types.ObjectId,
+            ref: "Category"
+        }
+    ]
 }, { timestamps: true, versionKey: false })
 
 export default mongoose.model("Post", PostModel)

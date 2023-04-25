@@ -7,9 +7,9 @@ const categorySchema = joi.object({
     name: joi.string().required(),
 });
 
-export const getAll = async (req, res) => {
+export const getAllCategory = async (req, res) => {
     try {
-        const categories = await Category.find();
+        const categories = await Category.find().populate("posts");
         if (categories.length === 0) {
             return res.json({
                 message: "Không có danh mục nào",
@@ -22,7 +22,7 @@ export const getAll = async (req, res) => {
         });
     }
 };
-export const get = async function (req, res) {
+export const getOneCategory = async function (req, res) {
     try {
         const category = await Category.findById(req.params.id).populate("posts");
         if (!category) {
@@ -37,7 +37,7 @@ export const get = async function (req, res) {
         });
     }
 };
-export const create = async function (req, res) {
+export const createCategory = async function (req, res) {
     try {
         const { error } = categorySchema.validate(req.body);
         if (error) {
@@ -61,7 +61,7 @@ export const create = async function (req, res) {
         });
     }
 };
-export const update = async function (req, res) {
+export const updateCategory = async function (req, res) {
     try {
         const category = await Category.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!category) {
@@ -79,7 +79,7 @@ export const update = async function (req, res) {
         });
     }
 };
-export const remove = async function (req, res) {
+export const removeCategory = async function (req, res) {
     try {
         const category = await Category.findByIdAndDelete(req.params.id);
         return res.json({
