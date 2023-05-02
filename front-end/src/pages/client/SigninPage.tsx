@@ -13,14 +13,14 @@ const SigninPage = (props: Props) => {
                 .then(() => alert('đăng nhập thành công'))
                 .catch(({ response }) => alert(response.data.message))
 
-            const user = localStorage.getItem('user')
-            console.log(user);
+            // const user = localStorage.getItem('user')
+            // console.log(user);
             
-            if (user === 'admin') {
-                navigate('/admin')
-            } else {
-                navigate('/');
-            }
+            // if (user === 'admin') {
+            //     navigate('/admin')
+            // } else {
+            //     navigate('/');
+            // }
         }
     }
     return (
@@ -29,7 +29,7 @@ const SigninPage = (props: Props) => {
                 <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
                     <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                         <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                            Đăng Nhập
+                            Sign in
                         </h1>
                         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 md:space-y-6" action="#">
                             <div>

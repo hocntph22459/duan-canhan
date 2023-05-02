@@ -1,15 +1,38 @@
-import React from 'react'
-import { Table, Button } from 'antd';
+import { Table, Button, Empty } from 'antd';
 import IContact from '../../../interfaces/contact';
+import Swal from 'sweetalert2';
+import { toast } from 'react-toastify';
 type Props = {
   contacts: IContact[]
-  Onremove:(id:string) => void
+  Onremove: (id: string) => void
 }
 const ManageContact = (props: Props) => {
-  const HandleRemove = (id:string)=>{
-    props.Onremove(id)
+  const HandleRemove = async (id: string) => {
+    Swal.fire({
+      title: 'Bạn có muốn xóa?',
+      text: 'Bạn sẽ không thể hoàn nguyên điều này!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Xóa',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          props.Onremove(id)
+          toast.success('Xóa liên hệ thành công');
+        } catch (error) {
+          toast.error('Lỗi khi xóa liên hệ');
+        }
+      }
+    });
   }
   const columns = [
+    {
+      title: '#',
+      dataIndex: 'key',
+      key: 'key'
+    },
     {
       title: 'name',
       dataIndex: 'name',
@@ -41,9 +64,9 @@ const ManageContact = (props: Props) => {
       key: 'createdAt'
     },
     {
-      action: 'name',
+      title: 'action',
       render: (item: any) => <>
-        <Button onClick={()=>HandleRemove(item.key)}>delete</Button>
+        <Button onClick={() => HandleRemove(item.key)}>delete</Button>
       </>
     },
   ];
@@ -60,12 +83,18 @@ const ManageContact = (props: Props) => {
 
     }
   })
+  if (data.length == 0)
+    return (
+      <Empty description={false} />
+    )
 
   return (
+
     <Table
       columns={columns}
       dataSource={data}
       bordered
+      pagination={{ pageSize: 4, showQuickJumper: true }}
     />
   )
 }

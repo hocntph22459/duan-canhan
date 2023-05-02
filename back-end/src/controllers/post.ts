@@ -1,5 +1,6 @@
 import Post from "../models/post";
 import Category from "../models/category";
+import postSchema from "../validates/post";
 
 // export const getAll = async (req, res) => {
 //     const { _sort = "createAt", _order = "asc", _limit = 10, _page = 1 } = req.query;
@@ -64,6 +65,13 @@ export const getOnePost = async function (req, res) {
 };
 export const createPost = async function (req, res) {
     try {
+        const { error } = postSchema.validate(req.body, { abortEarly: false });
+        if (error) {
+            const errors = error.details.map((err) => err.message);
+            return res.status(400).json({
+                message: errors,
+            });
+        }
         const post = await Post.create(req.body);
         if (!post) {
             return res.status(400).json({
@@ -87,6 +95,13 @@ export const createPost = async function (req, res) {
 };
 export const updatePost = async function (req, res) {
     try {
+        const { error } = postSchema.validate(req.body, { abortEarly: false });
+        if (error) {
+            const errors = error.details.map((err) => err.message);
+            return res.status(400).json({
+                message: errors,
+            });
+        }
         const post = await Post.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!post) {
             return res.status(400).json({

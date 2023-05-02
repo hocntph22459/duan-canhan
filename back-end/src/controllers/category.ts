@@ -1,11 +1,8 @@
 import dotenv from "dotenv";
-import joi from "joi";
 import Category from "../models/category";
-
+import Post from "../models/post";
+import categorySchema from "../validates/category";
 dotenv.config();
-const categorySchema = joi.object({
-    name: joi.string().required(),
-});
 
 export const getAllCategory = async (req, res) => {
     try {
@@ -39,10 +36,11 @@ export const getOneCategory = async function (req, res) {
 };
 export const createCategory = async function (req, res) {
     try {
-        const { error } = categorySchema.validate(req.body);
+        const { error } = categorySchema.validate(req.body, { abortEarly: false });
         if (error) {
+            const errors = error.details.map((err) => err.message);
             return res.status(400).json({
-                message: error.details.map((err) => err.message),
+                message: errors,
             });
         }
         const category = await Category.create(req.body);
@@ -63,6 +61,13 @@ export const createCategory = async function (req, res) {
 };
 export const updateCategory = async function (req, res) {
     try {
+        const { error } = categorySchema.validate(req.body, { abortEarly: false });
+        if (error) {
+            const errors = error.details.map((err) => err.message);
+            return res.status(400).json({
+                message: errors,
+            });
+        }
         const category = await Category.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!category) {
             return res.json({
@@ -81,11 +86,25 @@ export const updateCategory = async function (req, res) {
 };
 export const removeCategory = async function (req, res) {
     try {
-        const category = await Category.findByIdAndDelete(req.params.id);
-        return res.json({
-            message: "Xóa danh mục thành công",
-            category,
-        });
+        // Xoá danh mục và sản phẩm liên quan
+        const categories = await Category.findByIdAndDelete(req.params.id)
+        if (!categories) {
+            return res.status(404).json({
+                message: "Xóa danh mục thất bại",
+            });
+        } else {
+           const post = await Post.deleteMany({ CategoryId: req.params.id })
+                if (!post) {
+                    return res.status(404).json({
+                        message: "Xóa sản phẩm liên quan thất bại",
+                    });
+                } else {
+                    return res.status(200).json({
+                        message: "Đã xoá danh mục và sản phẩm liên quan thành công!",
+                    });
+                }
+        }
+
     } catch (error) {
         return res.status(400).json({
             message: error.message,

@@ -17,18 +17,18 @@ const HeaderLayout = () => {
 
         <div className="!w-[500px] gap-x-2 flex justify-center items-center">
           <Input
-            placeholder="Search"
+            placeholder="Tìm kiếm"
             className="w-full"
             prefix={<SearchOutlined />}
           />
-          <Button type='primary'>
+          <Button className='bg-black text-white'>
             <SearchOutlined />
           </Button>
         </div>
 
         <div>
           <Typography.Title level={5} className="!mb-0 !text-white cursor-pointer">
-            Welcome, Admin
+            Admin quản trị
           </Typography.Title>
         </div>
       </div>

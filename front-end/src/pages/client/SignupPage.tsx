@@ -1,94 +1,98 @@
-import React from 'react'
-import { useForm } from "react-hook-form"
-import { useNavigate } from "react-router-dom";
+import { Button, Col, Form, FormItemProps, Image, Input, Row } from 'antd';
+import { Link, useNavigate } from 'react-router-dom';
+
+import React from 'react';
+import { toast } from 'react-toastify';
 import { Signup } from '../../api/auth';
-type Props = {}
-const SignupPage = (props: Props) => {
-    const navigate = useNavigate()
-    const { register, handleSubmit, formState: { errors }, } = useForm();
-    const onSubmit = (data: any) => {
-        Signup(data).then(() => alert('đăng ký thành công'))
+import IUser from '../../interfaces/user';
+
+const MyFormItemContext = React.createContext<(string | number)[]>([]);
+
+function toArr(str: string | number | (string | number)[]): (string | number)[] {
+    return Array.isArray(str) ? str : [str];
+}
+const MyFormItem = ({ name, ...props }: FormItemProps) => {
+    const prefixPath = React.useContext(MyFormItemContext);
+    const concatName = name !== undefined ? [...prefixPath, ...toArr(name)] : undefined;
+    return <Form.Item name={concatName} {...props} />;
+};
+const SigupPage = () => {
+    const navigate = useNavigate();
+    const onFinish = async (value: IUser) => {
+        Signup(value).then(() => alert('đăng ký thành công'))
             .then(() => navigate('/signin'))
             .catch(({ response }) => alert(response.data.message))
-    }
+    };
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
-            {/* component */}
-            <div className="bg-grey-lighter min-h-screen flex flex-col">
-                <div className="container max-w-sm mx-auto flex-1 flex flex-col items-center justify-center px-2">
-                    <div className="bg-white px-6 py-8 rounded shadow-md text-black w-full">
-                        <h1 className="mb-8 text-3xl text-center">Đăng Ký</h1>
-                        <input {...register("name", {
+        <>
+            <h1 className="text-center mt-4 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                Sign up
+            </h1>
+            <Form className="mt-[32px] w-[400px] mx-auto" name="form_item_path" layout="vertical" onFinish={onFinish} autoComplete="off">
+                <MyFormItem
+                    name="name"
+                    label="name"
+                    rules={[
+                        {
+                            message: 'vui lòng nhập name!',
                             required: true,
-                        })}
-                            type="text"
-                            className="block border border-grey-light w-full p-3 rounded mb-4"
-                            name="name"
-                            placeholder="Full Name"
-                        />
-                        <input {...register("email", {
+                        },
+                    ]}
+                >
+                    <Input placeholder="nhập name" />
+                </MyFormItem>
+                <MyFormItem
+                    name="email"
+                    label="Email"
+                    rules={[
+                        {
+                            message: 'vui lòng nhập email!',
                             required: true,
-                            pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                        })}
-                            type="text"
-                            className="block border border-grey-light w-full p-3 rounded mb-4"
-                            name="email"
-                            placeholder="Email"
-                        />
-                        <input {...register("password", {
+                            type: 'email'
+                        },
+                    ]}
+                >
+                    <Input placeholder="nhập email" />
+                </MyFormItem>
+                <MyFormItem
+                    name="password"
+                    label="mật khẩu"
+                    rules={[
+                        {
+                            message: 'vui lòng nhập password!',
                             required: true,
-                            minLength: 6
-                        })}
-                            type="password"
-                            className="block border border-grey-light w-full p-3 rounded mb-4"
-                            name="password"
-                            placeholder="Password"
-                        />
-                        <input {...register("confirmpassword", {
+                        },
+                    ]}
+                >
+                    <Input placeholder="nhập password" />
+                </MyFormItem>
+                <MyFormItem
+                    name="confirmpassword"
+                    label="nhập lại mật khẩu"
+                    rules={[
+                        {
+                            message: 'vui lòng nhập confirm password!',
                             required: true,
-                            minLength: 6
-                        })}
-                            type="password"
-                            className="block border border-grey-light w-full p-3 rounded mb-4"
-                            name="confirmpassword"
-                            placeholder="Confirm Password"
-                        />
-                        <button
-                            type="submit"
-                            className="w-full text-center py-3 rounded bg-[black] text-white hover:bg-green-dark focus:outline-none my-1"
-                        >
-                            Đăng Ký
-                        </button>
-                        <div className="text-center text-sm text-grey-dark mt-4">
-                            Bằng cách đăng ký,
-                            <a
-                                className="no-underline border-b border-grey-dark text-grey-dark"
-                                href="#"
-                            >
-                                bạn đồng ý với Điều khoản dịch vụ
-                            </a>{" "}
-                            và
-                            <a
-                                className="no-underline border-b border-grey-dark text-grey-dark"
-                                href="#"
-                            >
-                                Chính sách bảo mật
-                            </a>
-                        </div>
-                    </div>
-                    <div className="text-grey-dark mt-6">
-                        Bạn có sẵn một tài khoản?
-                        <a
-                            className="no-underline border-b border-blue text-blue"
-                            href="/signin"
-                        >
-                            Đăng Nhập
-                        </a>
-                        .
-                    </div>
-                </div>
-            </div>
-        </form>
-    )
-}
-export default SignupPage
+                        },
+                    ]}
+                >
+                    <Input placeholder="nhập password" />
+                </MyFormItem>
+                <Button
+                    htmlType="submit"
+                    className="w-full text-center h-12 py-3 rounded bg-[black] text-white hover:bg-green-dark focus:outline-none my-1"
+                >
+                    Đăng ký
+                </Button>
+                <Col span={24} className="mt-5">
+                    Bạn có tài khoản?
+                    <Link to="/signin" className="text-primary">
+                        đăng nhập
+                    </Link>
+                </Col>
+            </Form>
+        </>
+    );
+};
+
+export default SigupPage;

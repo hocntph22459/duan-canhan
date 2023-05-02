@@ -1,4 +1,5 @@
 import Contact from "../models/contact";
+import contactSchema from "../validates/contact";
 export const getAllContact = async (req, res) => {
     try {
         const contact = await Contact.find()
@@ -38,6 +39,13 @@ export const getOneContact = async function (req, res) {
 };
 export const createContact = async function (req, res) {
     try {
+        const { error } = contactSchema.validate(req.body, { abortEarly: false });
+        if (error) {
+            const errors = error.details.map((err) => err.message);
+            return res.status(400).json({
+                message: errors,
+            });
+        }
         const contact = await Contact.create(req.body);
         if (!contact) {
             return res.status(400).json({
@@ -61,6 +69,13 @@ export const createContact = async function (req, res) {
 };
 export const updateContact = async function (req, res) {
     try {
+        const { error } = contactSchema.validate(req.body, { abortEarly: false });
+        if (error) {
+            const errors = error.details.map((err) => err.message);
+            return res.status(400).json({
+                message: errors,
+            });
+        }
         const contact = await Contact.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!contact) {
             return res.status(400).json({
