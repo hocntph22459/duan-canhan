@@ -23,7 +23,7 @@
    <a href="https://www.tiktok.com/@hocclnh" alt="tiktok">
     <img width="48px" src="https://sf-tb-sg.ibytedtos.com/obj/eden-sg/uhtyvueh7nulogpoguhm/tiktok-icon2.png"/>
   </a> 
-  <a href="mailto:hocntph22459@fpt.edu.vn" alt="Email">
+  <a href="mailto:bimbimmiu11@gmail.com" alt="Email">
     <img src="https://img.icons8.com/fluent/48/000000/mailing.png"/>
   </a>
 </p>
