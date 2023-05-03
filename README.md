@@ -9,7 +9,7 @@
 
 - 🌱 my personal project **dự án cá nhân của tôi**
 <br />
-## Skills:
+### Skills ###
 <div>
   <!-- https://simpleicons.org/ -->
   <span><img src="https://img.shields.io/badge/HTML5-282C34?logo=html5&logoColor=E34F26" alt="HTML5 logo" title="HTML5" height="25" /></span>
@@ -18,7 +18,7 @@
   &nbsp;
   <span><img src="https://img.shields.io/badge/Tailwind%20CSS-282C34?logo=tailwind-css&logoColor=38B2AC" alt="TailwindCSS logo" title="TailwindCSS" height="25" /></span>
   &nbsp;
-  <span><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLzcdLChrmgSq0vBoWUcMlX3CkgKbi61DwQS7cRkXXkQ&s" alt="ant logo" title="ant-design" height="25" /></span>
+  <span><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLzcdLChrmgSq0vBoWUcMlX3CkgKbi61DwQS7cRkXXkQ&s" alt="ant logo" title="antdesign" height="25" /></span>
   &nbsp;
   <span><img src="https://img.shields.io/badge/JavaScript-282C34?logo=javascript&logoColor=F7DF1E" alt="JavaScript logo" title="JavaScript" height="25" /></span>
   &nbsp;
@@ -37,7 +37,7 @@
 </div>
 
 <br />
-## 📫 How to reach me:
+### 📫 How to reach me ###
 
 <p align="center">
   <a href="https://www.facebook.com/hoclnh" alt="Facebook">
