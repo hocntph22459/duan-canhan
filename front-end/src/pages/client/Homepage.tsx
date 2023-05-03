@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import ICategory from '../../interfaces/category'
+import { Image } from 'antd'
 
 type Props = {
   categories: ICategory[]
@@ -145,7 +146,7 @@ const Homepage = (props: Props) => {
                 return (
                   <div key={index} className="container grid grid-cols-12 mx-auto dark:bg-gray-900">
                     <div className="bg-no-repeat bg-cover dark:bg-gray-700 col-span-full lg:col-span-4 background-image: url('https://source.unsplash.com/random/640x480'); background-position: center center; background-blend-mode: multiply; background-size: cover;">
-                      <a href={`/post/${post._id}`} ><img src={post.images[0]} alt="" /></a>
+                      <a href={`/post/${post._id}`} ><Image src={post.images[0]} alt="" /></a>
                     </div>
                     <div className="flex flex-col p-4 col-span-full row-span-full lg:col-span-8 lg:p-4">
                       <h1 className="text-3xl font-semibold">{post.title}</h1>

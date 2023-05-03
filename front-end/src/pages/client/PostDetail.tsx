@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import IPost from '../../interfaces/post'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { GetOnePost } from '../../api/post'
 import { useForm } from 'react-hook-form'
+import { Image } from 'antd';
 const PostDetail = () => {
   const { id } = useParams()
   const [postone, setpostone]: any = useState()
@@ -10,82 +10,89 @@ const PostDetail = () => {
     GetOnePost(id)
       .then(({ data }) => setpostone(data.data))
   }, [])
-  console.log(postone)
   const { register, handleSubmit, formState: { errors }, } = useForm();
   const onSubmit = (data: any) => {
-    const user = localStorage.getItem('user')
-    console.log(user);
+    // const user = localStorage.getItem('user')
+    // console.log(user);
   }
   if (!postone) return null;
   return (
     <>
-      <section className="w-full">
-        <div className='px-4'>
-          <img className='w-full' src='' />
-          <h1 className='text-[32px] font-bold'>{postone.title}</h1>
-          <img className='w-full' src={postone.images[0]}></img>
-          <p className='text-[18px] my-4'>{postone.content}</p>
-          <img className='w-full' src={postone.images[1]}></img>
-          {/* <img className='w-full' src={postone.images[2]}></img> */}
-          <h5></h5>
-          <p className="text-sm pb-3">
-            By <a href="#" className="font-semibold hover:text-gray-800">{postone.author}</a>,
-          </p>
-          <form onSubmit={handleSubmit(onSubmit)} className="sm:col-span-2 mt-8">
-            <label
-              htmlFor="message"
-              className="block mb-2 text-sm font-bold text-gray-900 dark:text-gray-400"
-            >
-              Bình luận của bạn
-            </label>
-            <textarea {...register("content", { required: true })}
-              id="message"
-              rows={6}
-              className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg shadow-sm border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              placeholder="Leave a comment..."
-              defaultValue={""}
-            />
-            <button
-              type="submit"
-              className="mt-4 py-3 px-5 text-sm font-medium text-center text-white rounded-lg bg-blue-800 sm:w-fit hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-            >
-              Gửi Bình luận
-            </button>
-          </form>
-          {/* <!-- Bình luận mặc định --> */}
-          <div>
-            {/* Bình luận mới */}
-            {postone.Comments.map((comment: any, index: any) => {
-              return (
-                <div key={index} className="border border-green-500 rounded-lg p-4 mt-4">
-                  <div className="flex">
-                    <div className="flex-shrink-0 mr-3">
-                      <img className="h-10 w-10 rounded-full" src="https://via.placeholder.com/50" alt="Avatar" />
-                    </div>
-                    <div>
-                      <div className="font-semibold">{comment.UserId}</div>
-                      <div className="text-gray-600 text-sm">{comment.createdAt}</div>
-                    </div>
-                  </div>
-                  <div className="mt-2">
-                    {comment.content}
-                  </div>
-                  <div className="mt-2">
-                    <a href="#" className="text-blue-500 hover:underline">Phản hồi</a>
-                  </div>
-                </div>
-              )
-            })}
+      <section className="px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <h1 className="text-3xl font-bold mb-3">{postone.title}</h1>
+          <p className="text-gray-600 text-sm mb-3">{postone.createdAt}</p>
+          <div className="prose prose-lg mb-6">
+            <div dangerouslySetInnerHTML={{ __html: postone.content }}></div>
+            <div className="grid grid-cols-2 gap-8 mt-4">
+              <Image.PreviewGroup
+                preview={{
+                  onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`),
+                }}
+              >
+                {postone.images.map((image: any, index: any) => (
+                  <Image src={image} alt={image.alt} key={index} />
+                ))}
+              </Image.PreviewGroup>
+            </div>
+          </div>
+          <div className="flex items-center space-x-4">
+            <div className="flex-shrink-0">
+              <img className="h-10 w-10 rounded-full" src={postone.author.avatarUrl} alt={postone.author.name} />
+            </div>
+            <div className="text-sm font-medium text-gray-900">
+              <p className="text-gray-600">by {postone.author}</p>
+            </div>
           </div>
         </div>
-        <>
-          {/* component */}
-          <link
-            rel="stylesheet"
-            href="https://cdn.tailgrids.com/tailgrids-fallback.css"
+        <form onSubmit={handleSubmit(onSubmit)} className="sm:col-span-2 mt-8">
+          <label
+            htmlFor="message"
+            className="block mb-2 text-sm font-bold text-gray-900 dark:text-gray-400"
+          >
+            Bình luận của bạn
+          </label>
+          <textarea {...register("content", { required: true })}
+            id="message"
+            rows={6}
+            className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg shadow-sm border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            placeholder="Leave a comment..."
+            defaultValue={""}
           />
-        </>
-      </section >
+          <button
+            type="submit"
+            className="mt-4 py-3 px-5 text-sm font-medium text-center text-white rounded-lg bg-blue-800 sm:w-fit hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+          >
+            Gửi Bình luận
+          </button>
+        </form>
+        {/* <!-- Bình luận mặc định --> */}
+        <div>
+          {/* Bình luận mới */}
+          {postone.Comments.map((comment: any, index: any) => {
+            return (
+              <div key={index} className="border border-green-500 rounded-lg p-4 mt-4">
+                <div className="flex">
+                  <div className="flex-shrink-0 mr-3">
+                    <img className="h-10 w-10 rounded-full" src="https://via.placeholder.com/50" alt="Avatar" />
+                  </div>
+                  <div>
+                    <div className="font-semibold">{comment.UserId}</div>
+                    <div className="text-gray-600 text-sm">{comment.createdAt}</div>
+                  </div>
+                </div>
+                <div className="mt-2">
+                  {comment.content}
+                </div>
+                <div className="mt-2">
+                  <a href="#" className="text-blue-500 hover:underline">Phản hồi</a>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </section>
+
       {/* ====== Blog Section Start */}
       <section className="pt-20 lg:pt-[120px] pb-10 lg:pb-20">
         <div className="container">

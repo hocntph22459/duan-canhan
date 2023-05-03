@@ -8,7 +8,7 @@ const postSchema = joi.object({
         "string.empty": 'Trường content không được để trống',
         "any.required": 'Trường content là bắt buộc',
     }),
-    images: joi.array().required().messages({
+    images: joi.string().required().messages({
         "string.empty": 'Trường images không được để trống',
         "any.required": 'Trường images là bắt buộc',
     }),
@@ -20,14 +20,8 @@ const postSchema = joi.object({
         "string.empty": 'Trường tags không được để trống',
         "any.required": 'Trường tags là bắt buộc',
     }),
-    views: joi.number().required().messages({
-        "string.empty": 'Trường views không được để trống',
-        "any.required": 'Trường views là bắt buộc',
-    }),
-    likes: joi.number().required().messages({
-        "string.empty": 'Trường likes không được để trống',
-        "any.required": 'Trường likes là bắt buộc',
-    }),
+    views: joi.number(),
+    likes: joi.number(),
     CategoryId: joi.string().required().messages({
         "string.empty": 'Trường CategoryId không được để trống',
         "any.required": 'Trường CategoryId là bắt buộc',

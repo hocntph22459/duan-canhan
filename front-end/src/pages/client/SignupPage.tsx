@@ -1,8 +1,7 @@
-import { Button, Col, Form, FormItemProps, Image, Input, Row } from 'antd';
+import { Button, Col, Form, FormItemProps, Input } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
-
+import { message } from "antd"
 import React from 'react';
-import { toast } from 'react-toastify';
 import { Signup } from '../../api/auth';
 import IUser from '../../interfaces/user';
 
@@ -19,9 +18,16 @@ const MyFormItem = ({ name, ...props }: FormItemProps) => {
 const SigupPage = () => {
     const navigate = useNavigate();
     const onFinish = async (value: IUser) => {
-        Signup(value).then(() => alert('đăng ký thành công'))
+        const key = 'loading'
+        Signup(value)
+        .then(() =>
+                    message.loading({ content: 'đang xử lý!', key, duration: 2 })
+                )
+                .then(() =>
+                    message.success('đăng ký thành công', 3)
+                )
             .then(() => navigate('/signin'))
-            .catch(({ response }) => alert(response.data.message))
+            .catch(({ response }) =>  message.error(response.data.message))
     };
     return (
         <>

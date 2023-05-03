@@ -3,7 +3,7 @@ import IPost from '../../interfaces/post'
 import ICategory from '../../interfaces/category'
 import type Icon from '@ant-design/icons';
 import { LikeOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
-import { Avatar, List, Skeleton, Switch } from 'antd';
+import { Avatar, List, Skeleton, Switch, Image } from 'antd';
 type Props = {
   categories: ICategory[],
   posts: any
@@ -30,7 +30,7 @@ const PostPage = (props: Props) => {
     key: item._id,
     href: '/post/' + item._id,
     title: item.title,
-    image: item.images,
+    images: item.images[0],
     content: item.content,
     comments: item.Comments,
     likes: item.likes,
@@ -60,19 +60,27 @@ const PostPage = (props: Props) => {
             key={item.key}
             actions={
               [
-                <IconText icon={StarOutlined} text="156" key="list-vertical-star-o" />,
                 <IconText icon={LikeOutlined} text={`${item.likes}`} key="list-vertical-like-o" />,
                 <IconText icon={MessageOutlined} text={`${item.comments.length}`} key="list-vertical-message" />,
               ]
             }
             extra={
+              // <a href={item.href}>
+              <>
+                <Image.PreviewGroup
+                  preview={{
+                    onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`),
+                  }}
+                >
+                  <Image
+                    width={272}
+                    alt="logo"
+                    src={item.images}
+                  />
+                </Image.PreviewGroup>
+              </>
 
-              <img
-                width={272}
-                alt="logo"
-                src={item.images}
-              />
-
+              // </a>
             }
           >
             <List.Item.Meta

@@ -26,7 +26,7 @@ export const CreateCategory = async (data: ICategory) => {
 
 export const UpdateCategory = async (data: ICategory) => {
     try {
-        const response = await intansce.put(`/categories/${data._id}/`, data, {
+        const response = await intansce.put(`/categories/${data._id}`, data, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
             },

@@ -1,21 +1,28 @@
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom";
 import { Signin } from "../../api/auth";
+import { message } from "antd"
 type Props = {}
 
 const SigninPage = (props: Props) => {
     const navigate = useNavigate()
     const { register, handleSubmit, formState: { errors }, } = useForm();
     const onSubmit = (data: any) => {
+        const key = 'loading'
         if (data) {
             Signin(data)
                 .then(({ data }) => localStorage.setItem('user', JSON.stringify(data)))
-                .then(() => alert('đăng nhập thành công'))
-                .catch(({ response }) => alert(response.data.message))
+                .then(() =>
+                    message.loading({ content: 'đang xử lý!', key, duration: 2 })
+                )
+                .then(() =>
+                    message.success('đăng nhập thành công', 3)
+                )
+                .catch(({ response }) => message.error(response.data.message))
 
             // const user = localStorage.getItem('user')
             // console.log(user);
-            
+
             // if (user === 'admin') {
             //     navigate('/admin')
             // } else {

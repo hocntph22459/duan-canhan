@@ -42,14 +42,17 @@ const ManagePost = (props: Props) => {
       title: 'images',
       dataIndex: 'images',
       key: 'images',
-      render: (item:any) =>
+      render: (item: any) =>
         <>
           <Image.PreviewGroup
             preview={{
               onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`),
             }}
           >
-            {item.images}
+            <Image
+              width={120}
+              src={item.images}
+            />
           </Image.PreviewGroup>
         </>
 
@@ -68,27 +71,21 @@ const ManagePost = (props: Props) => {
     },
   ];
 
+  const listData = Array.from(props.posts).map((item: any) => ({
+    key: item._id,
+    href: '/post/' + item._id,
+    title: item.title,
+    images: item.images[0],
+    content: item.content,
+    comments: item.Comments,
+    likes: item.likes,
+    createdAt: item.createdAt,
+    author: item.author,
+    tags: item.tags,
+    CategoryId: item.CategoryId,
+  }));
 
-  const data = props.posts.map((item: any) => {
-    return {
-      key: item._id,
-      title: item.title,
-      images: item.images.map((image: any) => {
-        return (
-          <Image
-            width={120}
-            src={image}
-          />
-        )
-      }),
-      createdAt: item.createdAt,
-      author: item.author,
-      tags: item.tags,
-      CategoryId: item.CategoryId,
-    }
-  })
-
-  if (data.length == 0)
+  if (listData.length == 0)
     return (
       <Empty description={false} />
     )
@@ -96,7 +93,7 @@ const ManagePost = (props: Props) => {
     <>
       <Table
         columns={columns}
-        dataSource={data}
+        dataSource={listData}
         bordered
         pagination={{
           pageSize: 4, showQuickJumper: true

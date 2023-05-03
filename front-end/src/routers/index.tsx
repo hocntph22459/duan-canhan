@@ -27,7 +27,7 @@ import Management from "../pages/admin/dashboard/Management";
 import IPost from "../interfaces/post";
 import ICategory from "../interfaces/category";
 import { GetAllUser, RemoveUser } from "../api/user";
-
+import { message } from 'antd';
 const Router = () => {
     // api post
     const [posts, setposts] = useState([])
@@ -37,38 +37,56 @@ const Router = () => {
     }, [])
 
     const HandleRemovePost = (id: string) => {
+        const key = 'loading'
         try {
             RemovePost(id)
-                .then(() => alert('xóa bài viết thành công'))
+                .then(() =>
+                    message.loading({ content: 'đang xóa!', key, duration: 2 })
+                )
+                .then(() =>
+                    message.success('xóa bài viết thành công', 3)
+                )
                 .then(() => GetAllPost()
                     .then(({ data }) => setposts(data.data)))
                 .catch(({ response }) => alert(response.data.message))
         } catch (error) {
-            console.log('lỗi');
+            console.log(error);
         }
     }
 
     const HandleAddPost = (data: IPost) => {
+        const key = 'loading'
         try {
             CreatePost(data)
-                .then(() => alert('thêm mới bài viết thành công'))
+                .then(() =>
+                    message.loading({ content: 'đang thêm mới!', key, duration: 2 })
+                )
+                .then(() =>
+                    message.success('thêm mới bài viết thành công', 3)
+                )
                 .then(() => GetAllPost()
                     .then(({ data }) => setposts(data.data)))
-                .catch(({ response }) => console.log(response.data.message))
+                .catch(({ response }) => message.error(response.data.message))
         } catch (error) {
-            console.log('lỗi');
+            console.log(error);
         }
     }
 
     const HandleUpdatePost = (data: IPost) => {
+        const key = 'loading'
         try {
             UpdatePost(data)
-                .then(() => alert('cập nhật bài viết thành công'))
+                .then(() =>
+                    message.loading({ content: 'đang cập nhật!', key, duration: 2 })
+                )
+                .then(() =>
+                    message.success('cập nhật bài viết thành công', 3)
+                )
                 .then(() => GetAllPost()
                     .then(({ data }) => setposts(data.data)))
-                .catch(({ response }) => console.log(response.data.message))
+                .catch(({ response }) => message.error(response.data.message))
         } catch (error) {
-            console.log('lỗi');
+            console.log(error);
         }
     }
 
@@ -81,37 +99,56 @@ const Router = () => {
     }, [])
 
     const HandleRemoveCategory = (id: any) => {
+        const key = 'loading'
         try {
             RemoveCategory(id)
+                .then(() =>
+                    message.loading({ content: 'đang xóa!', key, duration: 2 })
+                )
+                .then(() =>
+                    message.success('xóa danh mục thành công', 3)
+                )
                 .then(() => GetAllCategory()
                     .then(({ data }) => setcategories(data)))
-                .catch(({ response }) => alert(response.data.message))
+                .catch(({ response }) => message.error(response.data.message))
         } catch (error) {
-            console.log('lỗi');
+            console.log(error);
         }
     }
 
     const HandleAddCategory = (data: ICategory) => {
+        const key = 'loading'
         try {
             CreateCategory(data)
-                .then(() => alert('thêm mới danh mục thành công'))
+                .then(() =>
+                    message.loading({ content: 'đang thêm mới!', key, duration: 2 })
+                )
+                .then(() =>
+                    message.success('thêm mới danh mục thành công', 3)
+                )
                 .then(() => GetAllCategory()
                     .then(({ data }) => setcategories(data)))
-                .catch(({ response }) => console.log(response.data.message))
+                .catch(({ response }) => message.error(response.data.message))
         } catch (error) {
-            console.log('lỗi');
+            console.log(error);
         }
     }
 
     const HandleUpdateCategory = (data: ICategory) => {
+        const key = 'loading'
         try {
             UpdateCategory(data)
-                .then(() => alert('cập nhật danh mục thành công'))
+                .then(() =>
+                    message.loading({ content: 'đang cập nhật!', key, duration: 2 })
+                )
+                .then(() =>
+                    message.success('cập nhật danh mục thành công', 3)
+                )
                 .then(() => GetAllCategory()
                     .then(({ data }) => setcategories(data)))
-                .catch(({ response }) => console.log(response.data.message))
+                .catch(({ response }) => message.error(response.data.message))
         } catch (error) {
-            console.log('lỗi');
+            console.log(error);
         }
     }
 
@@ -123,24 +160,36 @@ const Router = () => {
     }, [])
 
     const HandleRemoveComment = (id: any) => {
+        const key = 'loading'
         try {
             RemoveComment(id)
-                .then(() => alert('xóa bình luận thành công'))
+                .then(() =>
+                    message.loading({ content: 'đang xóa!', key, duration: 2 })
+                )
+                .then(() =>
+                    message.success('xóa bình luận thành công!', 3)
+                )
                 .then(() => GetAllComment()
                     .then(({ data }) => setcomments(data.data)))
-                .catch(({ response }) => alert(response.data.message))
+                .catch(({ response }) => message.error(response.data.message))
         } catch (error) {
-            console.log('lỗi');
+            console.log(error);
         }
     }
 
     const HandleAddComment = (data: IContact) => {
+        const key = 'loading'
         try {
             CreateContact(data)
-                .then(() => alert('bình luận thành công'))
-                .catch(({ response }) => console.log(response.data.message))
+                .then(() =>
+                    message.loading({ content: 'đang gửi bình luận!', key, duration: 2 })
+                )
+                .then(() =>
+                    message.success('thành công!', 3)
+                )
+                .catch(({ response }) => message.error(response.data.message))
         } catch (error) {
-            console.log('lỗi');
+            console.log(error);
         }
     }
 
@@ -153,24 +202,36 @@ const Router = () => {
             .then(({ data }) => setcontacts(data.data))
     }, [])
     const HandleRemoveContact = (id: string) => {
+        const key = 'loading'
         try {
             RemoveContact(id)
-                .then(() => alert('xóa liên hệ thành công'))
+                .then(() =>
+                    message.loading({ content: 'đang xóa!', key, duration: 2 })
+                )
+                .then(() =>
+                    message.success('xóa liên hệ thành công!', 3)
+                )
                 .then(() => GetAllContact()
                     .then(({ data }) => setcontacts(data.data)))
-                .catch(({ response }) => alert(response.data.message))
+                .catch(({ response }) => message.error(response.data.message))
         } catch (error) {
-            console.log('lỗi');
+            console.log(error);
         }
     }
 
     const HandleAddContact = (data: IContact) => {
+        const key = 'loading'
         try {
             CreateContact(data)
-                .then(() => alert('gửi liên hệ thành công'))
-                .catch(({ response }) => alert(response.data.message))
+                .then(() =>
+                    message.loading({ content: 'đang gửi liên hệ!', key, duration: 2 })
+                )
+                .then(() =>
+                    message.success('gửi liên hệ thành công!', 3)
+                )
+                .catch(({ response }) => message.error(response.data.message))
         } catch (error) {
-            console.log('lỗi');
+            console.log(error);
         }
     }
 
@@ -182,14 +243,20 @@ const Router = () => {
     }, [])
 
     const HandleRemoveUser = (id: string) => {
+        const key = 'loading'
         try {
             RemoveUser(id)
-                .then(() => alert('xóa người dùng thành công'))
+                .then(() =>
+                    message.loading({ content: 'đang xóa!', key, duration: 2 })
+                )
+                .then(() =>
+                    message.success('xóa người dùng thành công!', 3)
+                )
                 .then(() => GetAllUser()
                     .then(({ data }) => setusers(data.data)))
-                .catch(({ response }) => alert(response.data.message))
+                .catch(({ response }) => message.error(response.data.message))
         } catch (error) {
-            console.log('lỗi');
+            console.log(error);
         }
     }
     return (
@@ -211,7 +278,7 @@ const Router = () => {
                     <Route index element={<Management />} />
                     <Route path='post'>
                         <Route index element={<ManagePost posts={posts} Onremove={HandleRemovePost} />} />
-                        <Route path='add' element={<ManagePostAdd categories={categories} Onadd={HandleAddPost}/>} />
+                        <Route path='add' element={<ManagePostAdd categories={categories} Onadd={HandleAddPost} />} />
                         <Route path=':id/update' element={<ManagePostEdit posts={posts} categories={categories} Onupdate={HandleUpdatePost} />} />
                     </Route>
                     <Route path='categories'>
