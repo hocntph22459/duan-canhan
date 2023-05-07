@@ -1,8 +1,6 @@
-import dotenv from "dotenv";
 import Category from "../models/category";
 import Post from "../models/post";
 import categorySchema from "../validates/category";
-dotenv.config();
 
 export const getAllCategory = async (req, res) => {
     try {
@@ -43,6 +41,13 @@ export const createCategory = async function (req, res) {
                 message: errors,
             });
         }
+        const {name} = req.body
+        const categoryExists = await Category.findOne({ name });
+        if (categoryExists) {
+            return res.status(400).json({
+                message: "danh mục đã tồn tại",
+            });
+        }
         const category = await Category.create(req.body);
         if (!category) {
             return res.json({
@@ -61,11 +66,11 @@ export const createCategory = async function (req, res) {
 };
 export const updateCategory = async function (req, res) {
     try {
-        const { error } = categorySchema.validate(req.body, { abortEarly: false });
-        if (error) {
-            const errors = error.details.map((err) => err.message);
+        const {name} = req.body
+        const categoryExists = await Category.findOne({ name });
+        if (categoryExists) {
             return res.status(400).json({
-                message: errors,
+                message: "danh mục đã tồn tại",
             });
         }
         const category = await Category.findByIdAndUpdate(req.params.id, req.body, { new: true });

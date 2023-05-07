@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import ICategory from '../../../interfaces/category';
-import { Button, Col, Form, Input, Row, Typography } from 'antd';
-import { toast } from 'react-toastify';
+import { Button, Col, Form, Input, Row } from 'antd';
 type Props = {
   categories: ICategory[],
   Onupdate: (data: ICategory) => void
@@ -12,14 +11,9 @@ const ManageCategoryEdit = (props: Props) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const onFinish = async (values: ICategory) => {
-    try {
-      if (!id) return;
-      props.Onupdate(values)
-      navigate('/admin/categories');
-
-    } catch (error) {
-      toast.error('Cập nhật danh mục thất bại!');
-    }
+    if (!id) return;
+    props.Onupdate(values)
+    navigate('/admin/categories');
   };
   const [categories, setcategories] = useState<ICategory>();
   useEffect(() => {
@@ -28,14 +22,14 @@ const ManageCategoryEdit = (props: Props) => {
   }, [props]);
   if (!categories) return null;
   const initial = {
-    _id:categories._id,
+    _id: categories._id,
     name: categories.name,
   };
   return (
     <Form layout="vertical" autoComplete="off" onFinish={onFinish} initialValues={initial}>
       <Row gutter={50}>
         <Col span={12}>
-        <Form.Item hidden
+          <Form.Item hidden
             label="_id"
             name="_id"
           >

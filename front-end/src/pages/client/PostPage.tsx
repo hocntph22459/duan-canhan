@@ -50,48 +50,88 @@ const PostPage = (props: Props) => {
   if (!listData) return null;
 
   return (
-    <>
-      <List
+    <div className='grid grid-cols-1 sm:grid-cols-2 mt-[100px]'>
+      <List pagination={{
+        onChange: (page) => {
+          console.log(page);
+        },
+        pageSize: 3,
+      }}
         itemLayout="vertical"
         size="large"
         dataSource={listData}
         renderItem={(item: any) => (
-          <List.Item
-            key={item.key}
-            actions={
-              [
-                <IconText icon={LikeOutlined} text={`${item.likes}`} key="list-vertical-like-o" />,
-                <IconText icon={MessageOutlined} text={`${item.comments.length}`} key="list-vertical-message" />,
-              ]
-            }
-            extra={
-              // <a href={item.href}>
-              <>
-                <Image.PreviewGroup
-                  preview={{
-                    onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`),
-                  }}
-                >
-                  <Image
-                    width={272}
-                    alt="logo"
-                    src={item.images}
-                  />
-                </Image.PreviewGroup>
-              </>
-
-              // </a>
-            }
-          >
-            <List.Item.Meta
-              avatar={<Avatar src={item.avatar} />}
-              title={<a href={item.href}>{item.title}</a>}
-            />
-            <p className='line-clamp-6'>{item.content}</p>
-          </List.Item>
+          <div className='grid grid-cols-1 sm:grid-cols-2'>
+            <List.Item
+              key={item.key}
+              actions={
+                [
+                  <IconText icon={LikeOutlined} text={item.likes == true ? `${item.likes}` : 0} key="list-vertical-like-o" />,
+                  <IconText icon={MessageOutlined} text={`${item.comments.length}`} key="list-vertical-message" />,
+                ]
+              }
+            >
+              <List.Item.Meta
+                avatar={<Avatar src={item.avatar} />}
+                title={<a href={item.href}>{item.title}</a>}
+              />
+              <p className='line-clamp-6'>{item.content}</p>
+            </List.Item>
+            <Image.PreviewGroup
+              preview={{
+                onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`),
+              }}
+            >
+              <Image className='sm:py-[48px] w-[272px]'
+                alt="img"
+                src={item.images}
+              />
+            </Image.PreviewGroup>
+          </div>
         )}
       />
-    </>
+
+
+      <List pagination={{
+        onChange: (page) => {
+          console.log(page);
+        },
+        pageSize: 3,
+      }}
+        itemLayout="vertical"
+        size="large"
+        dataSource={listData}
+        renderItem={(item: any) => (
+          <div className='grid grid-cols-1 sm:grid-cols-2'>
+            <List.Item
+              key={item.key}
+              actions={
+                [
+                  <IconText icon={LikeOutlined} text={`${item.likes}`} key="list-vertical-like-o" />,
+                  <IconText icon={MessageOutlined} text={`${item.comments.length}`} key="list-vertical-message" />,
+                ]
+              }
+            >
+              <List.Item.Meta
+                avatar={<Avatar src={item.avatar} />}
+                title={<a href={item.href}>{item.title}</a>}
+              />
+              <p className='line-clamp-6'>{item.content}</p>
+            </List.Item>
+            <Image.PreviewGroup
+              preview={{
+                onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`),
+              }}
+            >
+              <Image className='sm:py-[48px] w-[272px]'
+                alt="img"
+                src={item.images}
+              />
+            </Image.PreviewGroup>
+          </div>
+        )}
+      />
+    </div>
   )
 }
 export default PostPage

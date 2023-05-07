@@ -1,13 +1,14 @@
-import { Table, Button,Empty } from 'antd';
+import { Table, Button, Empty, Input, message } from 'antd';
 import IComment from '../../../interfaces/comment';
 import Swal from 'sweetalert2';
-import { toast } from 'react-toastify';
+import { useState } from 'react';
 type Props = {
   comments: IComment[]
-  Onremove:(id:string) => void
+  Onremove: (id: string) => void
 }
 const ManageComment = (props: Props) => {
-  const HandleRemove = async(id: string) => {
+  const [Search, setSeach] = useState("");
+  const HandleRemove = async (id: string) => {
     Swal.fire({
       title: 'Bạn có muốn xóa?',
       text: 'Bạn sẽ không thể hoàn nguyên điều này!',
@@ -18,12 +19,7 @@ const ManageComment = (props: Props) => {
       confirmButtonText: 'Xóa',
     }).then(async (result) => {
       if (result.isConfirmed) {
-        try {
-          props.Onremove(id)
-          toast.success('Xóa bình luận thành công');
-        } catch (error) {
-          toast.error('Lỗi khi xóa bình luận');
-        }
+        props.Onremove(id)
       }
     });
   }
@@ -51,30 +47,37 @@ const ManageComment = (props: Props) => {
     {
       title: 'action',
       render: (item: any) => <>
-        <Button onClick={()=>HandleRemove(item.key)}>delete</Button>
+        <Button onClick={() => HandleRemove(item.key)}>delete</Button>
       </>
     },
   ];
 
-  const data = props.comments.map(item => {
+  const listData = props.comments.map(item => {
     return {
       key: item._id,
       content: item.content,
       createdAt: item.createdAt,
-      PostId:item.PostId
+      PostId: item.PostId
     }
   })
-  if (data.length == 0)
+  if (listData.length == 0)
+    return (
+      <Empty description={false} />
+    )
   return (
-    <Empty description={false} />
-  )
-  return (
-    <Table
-      columns={columns}
-      dataSource={data}
-      bordered
-      pagination={{ pageSize: 4, showQuickJumper: true }}
-    />
+    <>
+      <Input.Search placeholder='Tìm kiếm...' onSearch={(value: any) => {
+        setSeach(value)
+      }} />
+      <Table
+        columns={columns}
+        dataSource={listData}
+        bordered
+        pagination={{
+          pageSize: 4, showQuickJumper: true
+        }}
+      />
+    </>
   )
 }
 

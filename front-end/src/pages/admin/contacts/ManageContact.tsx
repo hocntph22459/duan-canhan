@@ -1,12 +1,13 @@
-import { Table, Button, Empty } from 'antd';
+import { Table, Button, Empty, Input } from 'antd';
 import IContact from '../../../interfaces/contact';
 import Swal from 'sweetalert2';
-import { toast } from 'react-toastify';
+import { useState } from 'react';
 type Props = {
   contacts: IContact[]
   Onremove: (id: string) => void
 }
 const ManageContact = (props: Props) => {
+  const [Search, setSeach] = useState("");
   const HandleRemove = async (id: string) => {
     Swal.fire({
       title: 'Bạn có muốn xóa?',
@@ -18,12 +19,7 @@ const ManageContact = (props: Props) => {
       confirmButtonText: 'Xóa',
     }).then(async (result) => {
       if (result.isConfirmed) {
-        try {
-          props.Onremove(id)
-          toast.success('Xóa liên hệ thành công');
-        } catch (error) {
-          toast.error('Lỗi khi xóa liên hệ');
-        }
+        props.Onremove(id)
       }
     });
   }
@@ -36,7 +32,11 @@ const ManageContact = (props: Props) => {
     {
       title: 'name',
       dataIndex: 'name',
-      key: 'name'
+      key: 'name',
+      filteredValue: [Search],
+      onFilter: (value: any, record: any) => {
+        return record.name.includes(value.toLowerCase());
+      }
     },
     {
       title: 'email',
@@ -71,7 +71,7 @@ const ManageContact = (props: Props) => {
     },
   ];
 
-  const data = props.contacts.map(item => {
+  const listData = props.contacts.map(item => {
     return {
       key: item._id,
       name: item.name,
@@ -83,19 +83,25 @@ const ManageContact = (props: Props) => {
 
     }
   })
-  if (data.length == 0)
+  if (listData.length == 0)
     return (
       <Empty description={false} />
     )
 
   return (
-
-    <Table
-      columns={columns}
-      dataSource={data}
-      bordered
-      pagination={{ pageSize: 4, showQuickJumper: true }}
-    />
+    <>
+      <Input.Search placeholder='Tìm kiếm...' onSearch={(value: any) => {
+        setSeach(value)
+      }} />
+      <Table
+        columns={columns}
+        dataSource={listData}
+        bordered
+        pagination={{
+          pageSize: 4, showQuickJumper: true
+        }}
+      />
+    </>
   )
 }
 

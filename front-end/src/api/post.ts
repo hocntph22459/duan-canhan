@@ -1,11 +1,10 @@
 import IPost from "../interfaces/post"
 import intansce from "./intansce"
-
 export const GetAllPost = () => {
     return intansce.get('/posts')
 }
 
-export const GetOnePost = (_id: any) => {
+export const GetOnePost = (_id: string) => {
     return intansce.get('/posts/' + _id)
 }
 
@@ -37,7 +36,7 @@ export const UpdatePost = async (data: IPost) => {
     }
 }
 
-export const RemovePost = async (_id: any) => {
+export const RemovePost = async (_id: string) => {
     try {
         const response = await intansce.delete(`/posts/${_id}`, {
             headers: {

@@ -28,65 +28,61 @@ import IPost from "../interfaces/post";
 import ICategory from "../interfaces/category";
 import { GetAllUser, RemoveUser } from "../api/user";
 import { message } from 'antd';
+import IComment from "../interfaces/comment";
 const Router = () => {
     // api post
     const [posts, setposts] = useState([])
     useEffect(() => {
-        GetAllPost()
-            .then(({ data }) => setposts(data.data))
+        GetAllPost().then(({ data }) => setposts(data.data))
     }, [])
-
-    const HandleRemovePost = (id: string) => {
-        const key = 'loading'
+    const HandleRemovePost = async (id: string) => {
+        const key = 'loading';
         try {
-            RemovePost(id)
-                .then(() =>
-                    message.loading({ content: 'đang xóa!', key, duration: 2 })
-                )
-                .then(() =>
-                    message.success('xóa bài viết thành công', 3)
-                )
-                .then(() => GetAllPost()
-                    .then(({ data }) => setposts(data.data)))
-                .catch(({ response }) => alert(response.data.message))
-        } catch (error) {
-            console.log(error);
+            const response: any = await RemovePost(id);
+            const loading = await message.loading({ content: 'đang xử lý!', key, duration: 2 });
+            if (loading) {
+                message.success(response.data.message, 3);
+                GetAllPost().then(({ data }) => setposts(data.data))
+            }
+        } catch (error: any) {
+            if (error.response) {
+                message.error(error.response.data.message, 5);
+            } else {
+                message.error('Có lỗi xảy ra, vui lòng thử lại sau.', 5);
+            }
         }
     }
-
-    const HandleAddPost = (data: IPost) => {
+    const HandleAddPost = async (data: IPost) => {
         const key = 'loading'
         try {
-            CreatePost(data)
-                .then(() =>
-                    message.loading({ content: 'đang thêm mới!', key, duration: 2 })
-                )
-                .then(() =>
-                    message.success('thêm mới bài viết thành công', 3)
-                )
-                .then(() => GetAllPost()
-                    .then(({ data }) => setposts(data.data)))
-                .catch(({ response }) => message.error(response.data.message))
-        } catch (error) {
-            console.log(error);
+            const response = await CreatePost(data);
+            if (response) {
+                const loading = await message.loading({ content: 'đang xử lý!', key, duration: 2 })
+                if (loading) {
+                    message.success(response.data.message, 3);
+                    GetAllPost().then(({ data }) => setposts(data.data))
+                }
+            }
+
+        } catch (error: any) {
+            message.error(error.response.data.message, 5);
         }
     }
-
-    const HandleUpdatePost = (data: IPost) => {
-        const key = 'loading'
+    const HandleUpdatePost = async (data: IPost) => {
+        const key = 'loading';
         try {
-            UpdatePost(data)
-                .then(() =>
-                    message.loading({ content: 'đang cập nhật!', key, duration: 2 })
-                )
-                .then(() =>
-                    message.success('cập nhật bài viết thành công', 3)
-                )
-                .then(() => GetAllPost()
-                    .then(({ data }) => setposts(data.data)))
-                .catch(({ response }) => message.error(response.data.message))
-        } catch (error) {
-            console.log(error);
+            const response: any = await UpdatePost(data);
+            const loading = await message.loading({ content: 'đang xử lý!', key, duration: 2 });
+            if (loading) {
+                message.success(response.data.message, 3);
+                GetAllPost().then(({ data }) => setposts(data.data))
+            }
+        } catch (error: any) {
+            if (error.response) {
+                message.error(error.response.data.message, 5);
+            } else {
+                message.error('Có lỗi xảy ra, vui lòng thử lại sau.', 5);
+            }
         }
     }
 
@@ -97,166 +93,161 @@ const Router = () => {
         GetAllCategory()
             .then(({ data }) => setcategories(data))
     }, [])
-
-    const HandleRemoveCategory = (id: any) => {
-        const key = 'loading'
+    const HandleRemoveCategory = async (id: string) => {
+        const key = 'loading';
         try {
-            RemoveCategory(id)
-                .then(() =>
-                    message.loading({ content: 'đang xóa!', key, duration: 2 })
-                )
-                .then(() =>
-                    message.success('xóa danh mục thành công', 3)
-                )
-                .then(() => GetAllCategory()
-                    .then(({ data }) => setcategories(data)))
-                .catch(({ response }) => message.error(response.data.message))
-        } catch (error) {
-            console.log(error);
+            const response: any = await RemoveCategory(id);
+            const loading = await message.loading({ content: 'đang xử lý!', key, duration: 2 });
+            if (loading) {
+                message.success(response.data.message, 3);
+                GetAllCategory().then(({ data }) => setcategories(data));
+            }
+        } catch (error: any) {
+            if (error.response) {
+                message.error(error.response.data.message, 5);
+            } else {
+                message.error('Có lỗi xảy ra, vui lòng thử lại sau.', 5);
+            }
+        }
+    }
+    const HandleAddCategory = async (data: ICategory) => {
+        const key = 'loading';
+        try {
+            const response: any = await CreateCategory(data);
+            const loading = await message.loading({ content: 'đang xử lý!', key, duration: 2 });
+            if (loading) {
+                message.success(response.data.message, 3);
+                GetAllCategory().then(({ data }) => setcategories(data));
+            }
+        } catch (error: any) {
+            if (error.response) {
+                message.error(error.response.data.message, 5);
+            } else {
+                message.error('Có lỗi xảy ra, vui lòng thử lại sau.', 5);
+            }
+        }
+    }
+    const HandleUpdateCategory = async (data: ICategory) => {
+        const key = 'loading';
+        try {
+            const response: any = await UpdateCategory(data);
+            const loading = await message.loading({ content: 'đang xử lý!', key, duration: 2 });
+            if (loading) {
+                message.success(response.data.message, 3);
+                GetAllCategory().then(({ data }) => setcategories(data));
+            }
+        } catch (error: any) {
+            if (error.response) {
+                message.error(error.response.data.message, 5);
+            } else {
+                message.error('Có lỗi xảy ra, vui lòng thử lại sau.', 5);
+            }
         }
     }
 
-    const HandleAddCategory = (data: ICategory) => {
-        const key = 'loading'
-        try {
-            CreateCategory(data)
-                .then(() =>
-                    message.loading({ content: 'đang thêm mới!', key, duration: 2 })
-                )
-                .then(() =>
-                    message.success('thêm mới danh mục thành công', 3)
-                )
-                .then(() => GetAllCategory()
-                    .then(({ data }) => setcategories(data)))
-                .catch(({ response }) => message.error(response.data.message))
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    const HandleUpdateCategory = (data: ICategory) => {
-        const key = 'loading'
-        try {
-            UpdateCategory(data)
-                .then(() =>
-                    message.loading({ content: 'đang cập nhật!', key, duration: 2 })
-                )
-                .then(() =>
-                    message.success('cập nhật danh mục thành công', 3)
-                )
-                .then(() => GetAllCategory()
-                    .then(({ data }) => setcategories(data)))
-                .catch(({ response }) => message.error(response.data.message))
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
     // api comment 
     const [comments, setcomments] = useState([])
     useEffect(() => {
-        GetAllComment()
-            .then(({ data }) => setcomments(data.data))
+        GetAllComment().then(({ data }) => setcomments(data.data))
     }, [])
-
-    const HandleRemoveComment = (id: any) => {
-        const key = 'loading'
+    const HandleRemoveComment = async (id: string) => {
+        const key = 'loading';
         try {
-            RemoveComment(id)
-                .then(() =>
-                    message.loading({ content: 'đang xóa!', key, duration: 2 })
-                )
-                .then(() =>
-                    message.success('xóa bình luận thành công!', 3)
-                )
-                .then(() => GetAllComment()
-                    .then(({ data }) => setcomments(data.data)))
-                .catch(({ response }) => message.error(response.data.message))
-        } catch (error) {
-            console.log(error);
+            const response: any = await RemoveComment(id);
+            const loading = await message.loading({ content: 'đang xử lý!', key, duration: 2 });
+            if (loading) {
+                message.success(response.data.message, 3);
+                GetAllComment().then(({ data }) => setcomments(data.data))
+            }
+        } catch (error: any) {
+            if (error.response) {
+                message.error(error.response.data.message, 5);
+            } else {
+                message.error('Có lỗi xảy ra, vui lòng thử lại sau.', 5);
+            }
         }
     }
-
-    const HandleAddComment = (data: IContact) => {
-        const key = 'loading'
+    const HandleAddComment = async (data: IComment) => {
+        const key = 'loading';
         try {
-            CreateContact(data)
-                .then(() =>
-                    message.loading({ content: 'đang gửi bình luận!', key, duration: 2 })
-                )
-                .then(() =>
-                    message.success('thành công!', 3)
-                )
-                .catch(({ response }) => message.error(response.data.message))
-        } catch (error) {
-            console.log(error);
+            const response: any = await CreateComment(data);
+            const loading = await message.loading({ content: 'đang xử lý!', key, duration: 2 });
+            if (loading) {
+                message.success(response.data.message, 3);
+                GetAllComment().then(({ data }) => setcomments(data.data))
+            }
+        } catch (error: any) {
+            if (error.response) {
+                message.error(error.response.data.message, 5);
+            } else {
+                message.error('Có lỗi xảy ra, vui lòng thử lại sau.', 5);
+            }
         }
     }
-
 
 
     // api contact 
     const [contacts, setcontacts] = useState([])
     useEffect(() => {
-        GetAllContact()
-            .then(({ data }) => setcontacts(data.data))
+        GetAllContact().then(({ data }) => setcontacts(data.data))
     }, [])
-    const HandleRemoveContact = (id: string) => {
-        const key = 'loading'
+    const HandleRemoveContact = async (id: string) => {
+        const key = 'loading';
         try {
-            RemoveContact(id)
-                .then(() =>
-                    message.loading({ content: 'đang xóa!', key, duration: 2 })
-                )
-                .then(() =>
-                    message.success('xóa liên hệ thành công!', 3)
-                )
-                .then(() => GetAllContact()
-                    .then(({ data }) => setcontacts(data.data)))
-                .catch(({ response }) => message.error(response.data.message))
-        } catch (error) {
-            console.log(error);
+            const response: any = await RemoveContact(id);
+            const loading = await message.loading({ content: 'đang xử lý!', key, duration: 2 });
+            if (loading) {
+                message.success(response.data.message, 3);
+                GetAllContact().then(({ data }) => setcontacts(data.data))
+            }
+        } catch (error: any) {
+            if (error.response) {
+                message.error(error.response.data.message, 5);
+            } else {
+                message.error('Có lỗi xảy ra, vui lòng thử lại sau.', 5);
+            }
+        }
+    }
+    const HandleAddContact = async (data: IContact) => {
+        const key = 'loading';
+        try {
+            const response: any = await CreateContact(data);
+            const loading = await message.loading({ content: 'đang xử lý!', key, duration: 2 });
+            if (loading) {
+                message.success(response.data.message, 3);
+                GetAllContact().then(({ data }) => setcontacts(data.data))
+            }
+        } catch (error: any) {
+            if (error.response) {
+                message.error(error.response.data.message, 5);
+            } else {
+                message.error('Có lỗi xảy ra, vui lòng thử lại sau.', 5);
+            }
         }
     }
 
-    const HandleAddContact = (data: IContact) => {
-        const key = 'loading'
-        try {
-            CreateContact(data)
-                .then(() =>
-                    message.loading({ content: 'đang gửi liên hệ!', key, duration: 2 })
-                )
-                .then(() =>
-                    message.success('gửi liên hệ thành công!', 3)
-                )
-                .catch(({ response }) => message.error(response.data.message))
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
     // api users 
     const [users, setusers] = useState([])
     useEffect(() => {
-        GetAllUser()
-            .then(({ data }) => setusers(data.data))
+        GetAllUser().then(({ data }) => setusers(data.data))
     }, [])
-
-    const HandleRemoveUser = (id: string) => {
-        const key = 'loading'
+    const HandleRemoveUser = async (id: string) => {
+        const key = 'loading';
         try {
-            RemoveUser(id)
-                .then(() =>
-                    message.loading({ content: 'đang xóa!', key, duration: 2 })
-                )
-                .then(() =>
-                    message.success('xóa người dùng thành công!', 3)
-                )
-                .then(() => GetAllUser()
-                    .then(({ data }) => setusers(data.data)))
-                .catch(({ response }) => message.error(response.data.message))
-        } catch (error) {
-            console.log(error);
+            const response: any = await RemoveUser(id);
+            const loading = await message.loading({ content: 'đang xử lý!', key, duration: 2 });
+            if (loading) {
+                message.success(response.data.message, 3);
+                GetAllUser().then(({ data }) => setusers(data.data))
+            }
+        } catch (error: any) {
+            if (error.response) {
+                message.error(error.response.data.message, 5);
+            } else {
+                message.error('Có lỗi xảy ra, vui lòng thử lại sau.', 5);
+            }
         }
     }
     return (
@@ -270,10 +261,8 @@ const Router = () => {
                     </Route>
                     <Route path='/contact' element={<ContactPage Onadd={HandleAddContact} />} />
                 </Route>
-
                 <Route path='/signup' element={<SignupPage />}></Route>
                 <Route path='/signin' element={<SigninPage />}></Route>
-
                 <Route path='/admin' element={<LayoutAdmin />}>
                     <Route index element={<Management />} />
                     <Route path='post'>
@@ -296,11 +285,9 @@ const Router = () => {
                         <Route index element={<ManageUser users={users} Onremove={HandleRemoveUser} />} />
                     </Route>
                 </Route>
-
                 <Route path='*' element={<NotFoundPage />}></Route>
             </Routes>
         </BrowserRouter>
     )
 }
-
 export default Router

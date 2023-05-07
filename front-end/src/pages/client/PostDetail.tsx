@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { GetOnePost } from '../../api/post'
 import { useForm } from 'react-hook-form'
-import { Image } from 'antd';
+import { Image, List, Avatar } from 'antd';
+import IComment from '../../interfaces/comment';
 const PostDetail = () => {
-  const { id } = useParams()
+  const { id }: any = useParams()
   const [postone, setpostone]: any = useState()
   useEffect(() => {
     GetOnePost(id)
@@ -26,9 +27,6 @@ const PostDetail = () => {
             <div dangerouslySetInnerHTML={{ __html: postone.content }}></div>
             <div className="grid grid-cols-2 gap-8 mt-4">
               <Image.PreviewGroup
-                preview={{
-                  onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`),
-                }}
               >
                 {postone.images.map((image: any, index: any) => (
                   <Image src={image} alt={image.alt} key={index} />
@@ -69,27 +67,35 @@ const PostDetail = () => {
         {/* <!-- Bình luận mặc định --> */}
         <div>
           {/* Bình luận mới */}
-          {postone.Comments.map((comment: any, index: any) => {
-            return (
-              <div key={index} className="border border-green-500 rounded-lg p-4 mt-4">
-                <div className="flex">
-                  <div className="flex-shrink-0 mr-3">
-                    <img className="h-10 w-10 rounded-full" src="https://via.placeholder.com/50" alt="Avatar" />
-                  </div>
-                  <div>
-                    <div className="font-semibold">{comment.UserId}</div>
-                    <div className="text-gray-600 text-sm">{comment.createdAt}</div>
-                  </div>
-                </div>
+          <List pagination={{
+            onChange: (page) => {
+              console.log(page);
+            },
+            pageSize: 3,
+          }}
+            itemLayout="horizontal"
+            dataSource={postone.Comments.map((comment: IComment) => {
+              return {
+                key: comment._id,
+                content: comment.content,
+                UserId: comment.UserId,
+                createdAt: comment.createdAt
+              }
+            })}
+            renderItem={(item: IComment, index: any) => (
+              <List.Item >
+                <List.Item.Meta
+                  avatar={<Avatar src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`} />}
+                  title={<a href="https://ant.design">{item.UserId}</a>}
+                  description={item.content}
+                />
                 <div className="mt-2">
-                  {comment.content}
-                </div>
-                <div className="mt-2">
+                  <div className="text-gray-600 text-sm">{item.createdAt}</div>
                   <a href="#" className="text-blue-500 hover:underline">Phản hồi</a>
                 </div>
-              </div>
-            )
-          })}
+              </List.Item>
+            )}
+          />
         </div>
       </section>
 

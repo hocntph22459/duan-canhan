@@ -17,7 +17,7 @@ export const UpdateComment = (data: IComment) => {
     return intansce.put('/comments/' + data._id, data)
 }
 
-export const RemoveComment = async (_id: number) => {
+export const RemoveComment = async (_id: string) => {
     try {
         const response = await intansce.delete(`/comments/${_id}`, {
             headers: {

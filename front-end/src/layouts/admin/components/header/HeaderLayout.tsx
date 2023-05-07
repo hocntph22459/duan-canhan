@@ -16,14 +16,14 @@ const HeaderLayout = () => {
         </Link>
 
         <div className="!w-[500px] gap-x-2 flex justify-center items-center">
-          <Input
-            placeholder="Tìm kiếm"
-            className="w-full"
-            prefix={<SearchOutlined />}
-          />
-          <Button className='bg-black text-white'>
-            <SearchOutlined />
-          </Button>
+            <Input
+              placeholder="Tìm kiếm"
+              className="w-full"
+              prefix={<SearchOutlined />}
+            />
+            <Button className='bg-black text-white'>
+              <SearchOutlined />
+            </Button>
         </div>
 
         <div>

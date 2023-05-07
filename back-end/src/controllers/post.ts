@@ -95,13 +95,6 @@ export const createPost = async function (req, res) {
 };
 export const updatePost = async function (req, res) {
     try {
-        const { error } = postSchema.validate(req.body, { abortEarly: false });
-        if (error) {
-            const errors = error.details.map((err) => err.message);
-            return res.status(400).json({
-                message: errors,
-            });
-        }
         const post = await Post.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!post) {
             return res.status(400).json({

@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
+import moment from 'moment-timezone';
 
+moment.tz.setDefault('Asia/Ho_Chi_Minh');
 const PostModel = new mongoose.Schema({
     title: {
         type: String,
@@ -32,8 +34,8 @@ const PostModel = new mongoose.Schema({
     },
     Comments: [
         {
-            type:mongoose.Types.ObjectId,
-            ref:"Comment"
+            type: mongoose.Types.ObjectId,
+            ref: "Comment"
         }
     ],
     CategoryId: [
@@ -42,6 +44,17 @@ const PostModel = new mongoose.Schema({
             ref: "Category"
         }
     ]
-}, { timestamps: true, versionKey: false })
+}, {
+    timestamps: true,
+    versionKey: false,
+    toJSON: {
+        virtuals: true,
+        transform: (doc, ret) => {
+            ret.createdAt = moment(ret.createdAt).format('DD/MM/YYYY HH:mm:ss');
+            ret.updatedAt = moment(ret.updatedAt).format('DD/MM/YYYY HH:mm:ss');
+            delete ret.id;
+        },
+    },
+})
 
 export default mongoose.model("Post", PostModel)

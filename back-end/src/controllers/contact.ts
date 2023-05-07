@@ -5,7 +5,7 @@ export const getAllContact = async (req, res) => {
         const contact = await Contact.find()
         if (contact.length === 0) {
             return res.status(400).json({
-                message: "Không có góp ý nào",
+                message: "Không có liên hệ nào",
             });
         }
         return res.status(200).json({
@@ -24,7 +24,7 @@ export const getOneContact = async function (req, res) {
         const contact = await Contact.findById(req.params.id)
         if (!contact) {
             return res.status(400).json({
-                message: "Không có góp ý nào",
+                message: "Không có liên hệ nào",
             });
         }
         return res.status(200).json({
@@ -49,7 +49,7 @@ export const createContact = async function (req, res) {
         const contact = await Contact.create(req.body);
         if (!contact) {
             return res.status(400).json({
-                message: "Không thể thêm góp ý",
+                message: "Không thể gửi liên hệ",
             });
         }
         // await User.findByIdAndUpdate(contact.UserId, {
@@ -58,7 +58,7 @@ export const createContact = async function (req, res) {
         //     },
         // });
         return res.status(200).json({
-            message: "Thêm góp ý thành công",
+            message: "gửi liên hệ thành công",
             data: contact,
         });
     } catch (error) {
@@ -79,11 +79,11 @@ export const updateContact = async function (req, res) {
         const contact = await Contact.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!contact) {
             return res.status(400).json({
-                message: "Cập nhật góp ý không thành công",
+                message: "Cập nhật liên hệ không thành công",
             });
         }
         return res.status(200).json({
-            message: "Cập nhật góp ý thành công",
+            message: "Cập nhật liên hệ thành công",
             data: contact,
         });
     } catch (error) {
@@ -96,7 +96,7 @@ export const removeContact = async function (req, res) {
     try {
         const contact = await Contact.findByIdAndDelete(req.params.id);
         return res.status(200).json({
-            message: "Xóa góp ý thành công",
+            message: "Xóa liên hệ thành công",
             contact,
         });
     } catch (error) {

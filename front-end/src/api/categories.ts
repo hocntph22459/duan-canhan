@@ -5,7 +5,7 @@ export const GetAllCategory = () => {
     return intansce.get('/categories')
 }
 
-export const GetOneCategory = (_id: number) => {
+export const GetOneCategory = (_id: string) => {
     return intansce.get('/categories/' + _id)
 }
 
@@ -39,7 +39,7 @@ export const UpdateCategory = async (data: ICategory) => {
     }
 }
 
-export const RemoveCategory = async (_id: number) => {
+export const RemoveCategory = async (_id: string) => {
     try {
         const response = await intansce.delete(`/categories/${_id}`, {
             headers: {

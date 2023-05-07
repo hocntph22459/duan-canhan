@@ -1,12 +1,15 @@
-import { Table, Button,Empty } from 'antd';
+import { Table, Button, Empty, message, Input } from 'antd';
 import ICategory from '../../../interfaces/category';
 import Swal from 'sweetalert2';
-import { toast } from 'react-toastify';
+import { useState } from 'react';
 type Props = {
   categories: ICategory[]
   Onremove: (id: string) => void
 }
 const ManageCategory = (props: Props) => {
+  const [Search, setSeach] = useState("");
+
+
   const HandleRemove = (id: string) => {
     Swal.fire({
       title: 'Bạn có muốn xóa?',
@@ -18,12 +21,7 @@ const ManageCategory = (props: Props) => {
       confirmButtonText: 'Xóa',
     }).then(async (result) => {
       if (result.isConfirmed) {
-        try {
-          props.Onremove(id)
-          toast.success('Xóa danh mục thành công');
-        } catch (error) {
-          toast.error('Lỗi khi xóa danh mục');
-        }
+        props.Onremove(id)
       }
     });
   }
@@ -36,7 +34,11 @@ const ManageCategory = (props: Props) => {
     {
       title: 'name',
       dataIndex: 'name',
-      key: 'name'
+      key: 'name',
+      filteredValue: [Search],
+      onFilter: (value: any, record: any) => {
+        return record.name.includes(value.toLowerCase());
+      }
     },
     {
       title: 'created At',
@@ -61,16 +63,21 @@ const ManageCategory = (props: Props) => {
     }
   })
   if (data.length == 0)
+    return (
+      <Empty description={false} />
+    )
   return (
-    <Empty description={false} />
-  )
-  return (
-    <Table
-      columns={columns}
-      dataSource={data}
-      bordered
-      pagination={{ pageSize: 4, showQuickJumper: true }}
-    />
+    <>
+      <Input.Search placeholder='Tìm kiếm...' onSearch={(value: any) => {
+        setSeach(value)
+      }} />
+      <Table
+        columns={columns}
+        dataSource={data}
+        bordered
+        pagination={{ pageSize: 4, showQuickJumper: true }}
+      />
+    </>
   )
 }
 

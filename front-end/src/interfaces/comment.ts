@@ -3,7 +3,7 @@ interface IComment {
     content: string,
     UserId:string[],
     PostId:string[],
-    createdAt?: Date;
+    createdAt?: String;
     updatedAt?: Date;
     deletedAt?: Date | null,
 }

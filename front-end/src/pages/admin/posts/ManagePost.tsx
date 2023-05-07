@@ -1,12 +1,13 @@
-import { Table, Button, Empty, Image } from 'antd';
+import { Table, Button, Empty, Image, Input } from 'antd';
 import IPost from '../../../interfaces/post';
 import Swal from 'sweetalert2';
-import { toast } from 'react-toastify';
+import { useState } from 'react';
 type Props = {
-  posts: any
+  posts: IPost[]
   Onremove: (id: string) => void
 }
 const ManagePost = (props: Props) => {
+  const [Search, setSeach] = useState("");
   const HandleRemove = async (id: string) => {
     Swal.fire({
       title: 'Bạn có muốn xóa?',
@@ -18,12 +19,7 @@ const ManagePost = (props: Props) => {
       confirmButtonText: 'Xóa',
     }).then(async (result) => {
       if (result.isConfirmed) {
-        try {
-          props.Onremove(id)
-          toast.success('Xóa bài viết thành công');
-        } catch (error) {
-          toast.error('Lỗi khi xóa bài viết');
-        }
+        props.Onremove(id)
       }
     });
   }
@@ -40,19 +36,14 @@ const ManagePost = (props: Props) => {
     },
     {
       title: 'images',
-      dataIndex: 'images',
       key: 'images',
       render: (item: any) =>
         <>
           <Image.PreviewGroup
-            preview={{
-              onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`),
-            }}
           >
-            <Image
-              width={120}
-              src={item.images}
-            />
+            {item.images.map((image: any, index: any) => (
+              <Image style={{ width: 50, height: 50 }} src={image} alt={image.alt} key={index} />
+            ))}
           </Image.PreviewGroup>
         </>
 
@@ -75,7 +66,7 @@ const ManagePost = (props: Props) => {
     key: item._id,
     href: '/post/' + item._id,
     title: item.title,
-    images: item.images[0],
+    images: item.images,
     content: item.content,
     comments: item.Comments,
     likes: item.likes,
@@ -91,6 +82,9 @@ const ManagePost = (props: Props) => {
     )
   return (
     <>
+      <Input.Search placeholder='Tìm kiếm...' onSearch={(value: any) => {
+        setSeach(value)
+      }} />
       <Table
         columns={columns}
         dataSource={listData}

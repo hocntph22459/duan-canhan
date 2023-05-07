@@ -19,22 +19,28 @@ const SigupPage = () => {
     const navigate = useNavigate();
     const onFinish = async (value: IUser) => {
         const key = 'loading'
-        Signup(value)
-        .then(() =>
-                    message.loading({ content: 'đang xử lý!', key, duration: 2 })
-                )
-                .then(() =>
-                    message.success('đăng ký thành công', 3)
-                )
-            .then(() => navigate('/signin'))
-            .catch(({ response }) =>  message.error(response.data.message))
+        if (value) {
+            try {
+                const response = await Signup(value);
+                const loading = await message.loading({ content: 'đang xử lý!', key, duration: 2 })
+                if (loading) {
+                    if (response && response.data) {
+                        message.success(response.data.message, 3);
+                        navigate('/signin')
+                    }
+                }
+
+            } catch (error: any) {
+                message.error(error.response.data.message, 5);
+            }
+        }
     };
     return (
         <>
-            <h1 className="text-center mt-4 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                Sign up
-            </h1>
-            <Form className="mt-[32px] w-[400px] mx-auto" name="form_item_path" layout="vertical" onFinish={onFinish} autoComplete="off">
+            <Form className="mt-[100px] w-[400px] mx-auto" name="form_item_path" layout="vertical" onFinish={onFinish} autoComplete="off">
+                <h1 className="text-center mt-4 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                    Sign up
+                </h1>
                 <MyFormItem
                     name="name"
                     label="name"

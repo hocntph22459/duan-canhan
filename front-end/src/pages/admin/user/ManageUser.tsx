@@ -1,13 +1,13 @@
-import { Table, Button,Empty,Popconfirm, message } from 'antd';
+import { Table, Button, Empty, Input } from 'antd';
 import IUser from '../../../interfaces/user';
 import Swal from 'sweetalert2';
-import { toast } from 'react-toastify';
-
+import { useState } from 'react';
 type Props = {
   users: IUser[]
   Onremove: (id: string) => void
 }
 const ManageUser = (props: Props) => {
+  const [Search, setSeach] = useState("");
   const HandleRemove = async (id: string) => {
     Swal.fire({
       title: 'Bạn có muốn xóa?',
@@ -19,12 +19,7 @@ const ManageUser = (props: Props) => {
       confirmButtonText: 'Xóa',
     }).then(async (result) => {
       if (result.isConfirmed) {
-        try {
-          props.Onremove(id)
-          toast.success('Xóa người dùng thành công');
-        } catch (error) {
-          toast.error('Lỗi khi xóa người dùng');
-        }
+        props.Onremove(id)
       }
     });
   }
@@ -37,12 +32,20 @@ const ManageUser = (props: Props) => {
     {
       title: 'name',
       dataIndex: 'name',
-      key: 'name'
+      key: 'name',
+      filteredValue: [Search],
+      onFilter: (value: any, record: any) => {
+        return record.name.includes(value.toLowerCase());
+      }
     },
     {
       title: 'email',
       dataIndex: 'email',
-      key: 'email'
+      key: 'email',
+      filteredValue: [Search],
+      onFilter: (value: any, record: any) => {
+        return record.name.includes(value.toLowerCase());
+      }
     },
     {
       title: 'role',
@@ -57,7 +60,7 @@ const ManageUser = (props: Props) => {
     {
       action: 'name',
       render: (item: any) => <>
-        {item.role === 'admin' ? <Button hidden>delete</Button> : 
+        {item.role === 'admin' ? <Button hidden>delete</Button> :
           <Button onClick={() => HandleRemove(item.key)} >Delete</Button>
         }
       </>
@@ -74,16 +77,21 @@ const ManageUser = (props: Props) => {
     }
   })
   if (data.length == 0)
+    return (
+      <Empty description={false} />
+    )
   return (
-    <Empty description={false} />
-  )
-  return (
-    <Table
-      columns={columns}
-      dataSource={data}
-      bordered
-      pagination={{ pageSize: 4, showQuickJumper: true }}
-    />
+    <>
+      <Input.Search placeholder='Tìm kiếm...' onSearch={(value: any) => {
+        setSeach(value)
+      }} />
+      <Table
+        columns={columns}
+        dataSource={data}
+        bordered
+        pagination={{ pageSize: 4, showQuickJumper: true }}
+      />
+    </>
   )
 }
 
