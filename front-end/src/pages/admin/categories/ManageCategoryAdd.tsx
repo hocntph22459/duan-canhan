@@ -1,6 +1,6 @@
 import { Button, Col, Form, Input, Modal, Row } from 'antd';
-import ICategory from '../../../interfaces/category';
 import { useNavigate } from 'react-router-dom';
+import { ICategory } from '../../../types/category';
 type Props = {
   Onadd: (data: ICategory) => void
 }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import ICategory from '../../../interfaces/category';
 import { Button, Col, Form, Input, Row } from 'antd';
+import { ICategory } from '../../../types/category';
 type Props = {
   categories: ICategory[],
   Onupdate: (data: ICategory) => void

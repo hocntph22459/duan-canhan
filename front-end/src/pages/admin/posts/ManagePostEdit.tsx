@@ -3,13 +3,13 @@ import {
   Button, Form, Input, Select, message,
 } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
-import IPost from '../../../interfaces/post';
 import axios from 'axios';
-import ICategory from '../../../interfaces/category';
 import { PlusOutlined } from '@ant-design/icons';
 import { Modal, Upload } from 'antd';
 import type { RcFile, UploadProps } from 'antd/es/upload';
 import type { UploadFile } from 'antd/es/upload/interface';
+import { ICategory } from '../../../types/category';
+import { IPost } from '../../../types/post';
 type Props = {
   posts: IPost[]
   categories: ICategory[],

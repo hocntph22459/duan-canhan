@@ -1,4 +1,4 @@
-import IPost from "../interfaces/post"
+import { IPost } from "../types/post"
 import intansce from "./intansce"
 export const GetAllPost = () => {
     return intansce.get('/posts')

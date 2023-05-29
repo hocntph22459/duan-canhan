@@ -1,7 +1,7 @@
 import { Table, Button, Empty, Input } from 'antd';
-import IUser from '../../../interfaces/user';
 import Swal from 'sweetalert2';
 import { useState } from 'react';
+import IUser from '../../../types/user';
 type Props = {
   users: IUser[]
   Onremove: (id: string) => void

@@ -1,7 +1,7 @@
 import { Table, Button, Empty, Input, message } from 'antd';
-import IComment from '../../../interfaces/comment';
 import Swal from 'sweetalert2';
 import { useState } from 'react';
+import IComment from '../../../types/comment';
 type Props = {
   comments: IComment[]
   Onremove: (id: string) => void
@@ -57,7 +57,7 @@ const ManageComment = (props: Props) => {
       key: item._id,
       content: item.content,
       createdAt: item.createdAt,
-      PostId: item.PostId
+      PostId: item.post
     }
   })
   if (listData.length == 0)

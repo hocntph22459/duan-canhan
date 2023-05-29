@@ -1,9 +1,11 @@
-interface ICategory {
+interface IUser {
     _id: string;
     name: string,
-    posts: string[],
+    email: string,
+    password: string,
+    role: "admin" | "member",
     createdAt?: Date;
     updatedAt?: Date;
     deletedAt?: Date | null,
 }
-export default ICategory
+export default IUser

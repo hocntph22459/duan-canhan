@@ -1,7 +1,7 @@
 import { Table, Button, Empty, message, Input } from 'antd';
-import ICategory from '../../../interfaces/category';
 import Swal from 'sweetalert2';
 import { useState } from 'react';
+import { ICategory } from '../../../types/category';
 type Props = {
   categories: ICategory[]
   Onremove: (id: string) => void

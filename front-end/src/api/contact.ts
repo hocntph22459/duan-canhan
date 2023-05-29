@@ -1,4 +1,4 @@
-import IContact from "../interfaces/contact"
+import IContact from "../types/contact"
 import intansce from "./intansce"
 
 export const GetAllContact = () => {

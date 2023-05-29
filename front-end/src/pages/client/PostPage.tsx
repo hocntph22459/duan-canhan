@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import IPost from '../../interfaces/post'
-import ICategory from '../../interfaces/category'
+import React from 'react'
 import type Icon from '@ant-design/icons';
-import { LikeOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
-import { Avatar, List, Skeleton, Switch, Image } from 'antd';
+import { LikeOutlined, MessageOutlined } from '@ant-design/icons';
+import { Avatar, List, Image } from 'antd';
+import { ICategory } from '../../types/category';
 type Props = {
   categories: ICategory[],
   posts: any
@@ -13,18 +12,6 @@ interface IconTextProps {
   text: React.ReactNode;
 }
 const PostPage = (props: Props) => {
-  // const [categories, setcategories] = useState<ICategory[]>([])
-  // useEffect(() => {
-  //   setcategories(props.categories)
-  // }, [props])
-  // console.log(categories);
-
-  // const [posts, setposts] = useState<IPost[]>([])
-  // useEffect(() => {
-  //   setposts(props.posts)
-  // }, [props])
-  // console.log(posts);
-
 
   const listData = Array.from(props.posts).map((item: any) => ({
     key: item._id,

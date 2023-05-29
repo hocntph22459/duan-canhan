@@ -1,17 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import ICategory from '../../interfaces/category'
-import { Image } from 'antd'
-
+import { ICategory } from '../../types/category'
 type Props = {
   categories: ICategory[]
 }
 
-const Homepage = (props: Props) => {
-  const [categories, setcategories] = useState<ICategory[]>([])
-  useEffect(() => {
-    setcategories(props.categories)
-  }, [props])
-  // console.log(categories);
+const Homepage = ({categories}: Props) => {
   return (
     <>
       <div className="md:flex flex-no-wrap space-x-0 md:space-x-6 mb-16 xl:mt-[100px]">

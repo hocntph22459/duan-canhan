@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { message } from "antd"
 import React from 'react';
 import { Signup } from '../../api/auth';
-import IUser from '../../interfaces/user';
+import IUser from '../../types/user';
 
 const MyFormItemContext = React.createContext<(string | number)[]>([]);
 

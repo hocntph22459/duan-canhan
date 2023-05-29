@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { GetOnePost } from '../../api/post'
 import { useForm } from 'react-hook-form'
 import { Image, List, Avatar } from 'antd';
-import IComment from '../../interfaces/comment';
+import IComment from '../../types/comment';
 const PostDetail = () => {
   const { id }: any = useParams()
   const [postone, setpostone]: any = useState()
@@ -78,7 +78,7 @@ const PostDetail = () => {
               return {
                 key: comment._id,
                 content: comment.content,
-                UserId: comment.UserId,
+                UserId: comment.user,
                 createdAt: comment.createdAt
               }
             })}
@@ -86,7 +86,7 @@ const PostDetail = () => {
               <List.Item >
                 <List.Item.Meta
                   avatar={<Avatar src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`} />}
-                  title={<a href="https://ant.design">{item.UserId}</a>}
+                  title={<a href="https://ant.design">{item.user}</a>}
                   description={item.content}
                 />
                 <div className="mt-2">

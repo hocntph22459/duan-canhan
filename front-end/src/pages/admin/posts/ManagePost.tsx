@@ -1,7 +1,7 @@
 import { Table, Button, Empty, Image, Input } from 'antd';
-import IPost from '../../../interfaces/post';
 import Swal from 'sweetalert2';
 import { useState } from 'react';
+import { IPost } from '../../../types/post';
 type Props = {
   posts: IPost[]
   Onremove: (id: string) => void

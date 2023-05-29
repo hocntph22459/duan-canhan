@@ -1,7 +1,7 @@
 import { Table, Button, Empty, Input } from 'antd';
-import IContact from '../../../interfaces/contact';
 import Swal from 'sweetalert2';
 import { useState } from 'react';
+import IContact from '../../../types/contact';
 type Props = {
   contacts: IContact[]
   Onremove: (id: string) => void

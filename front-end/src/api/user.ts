@@ -1,4 +1,4 @@
-import IUser from "../interfaces/user"
+import IUser from "../types/user"
 import intansce from "./intansce"
 
 export const GetAllUser = () => {

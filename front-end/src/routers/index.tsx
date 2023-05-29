@@ -13,7 +13,7 @@ import { GetAllPost, CreatePost, UpdatePost, RemovePost } from "../api/post";
 import { GetAllCategory, CreateCategory, UpdateCategory, RemoveCategory } from "../api/categories";
 import { GetAllComment, CreateComment, RemoveComment } from "../api/comments";
 import { GetAllContact, CreateContact, RemoveContact } from "../api/contact";
-import IContact from "../interfaces/contact";
+import IContact from "../types/contact";
 import ManagePost from "../pages/admin/posts/ManagePost";
 import ManagePostAdd from "../pages/admin/posts/ManagePostAdd";
 import ManagePostEdit from "../pages/admin/posts/ManagePostEdit";
@@ -24,11 +24,11 @@ import ManageComment from "../pages/admin/comments/ManageComment";
 import ManageContact from "../pages/admin/contacts/ManageContact";
 import ManageUser from "../pages/admin/user/ManageUser";
 import Management from "../pages/admin/dashboard/Management";
-import IPost from "../interfaces/post";
-import ICategory from "../interfaces/category";
 import { GetAllUser, RemoveUser } from "../api/user";
 import { message } from 'antd';
-import IComment from "../interfaces/comment";
+import IComment from "../types/comment";
+import { IPost } from "../types/post";
+import { ICategory } from "../types/category";
 const Router = () => {
     // api post
     const [posts, setposts] = useState([])
@@ -91,7 +91,7 @@ const Router = () => {
     const [categories, setcategories] = useState([])
     useEffect(() => {
         GetAllCategory()
-            .then(({ data }) => setcategories(data))
+            .then(({ data }) => setcategories(data.data))
     }, [])
     const HandleRemoveCategory = async (id: string) => {
         const key = 'loading';
