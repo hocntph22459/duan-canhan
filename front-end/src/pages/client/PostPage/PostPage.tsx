@@ -2,7 +2,7 @@ import React from 'react'
 import type Icon from '@ant-design/icons';
 import { LikeOutlined, MessageOutlined } from '@ant-design/icons';
 import { Avatar, List, Image } from 'antd';
-import { ICategory } from '../../types/category';
+import { ICategory } from '../../../types/category';
 type Props = {
   categories: ICategory[],
   posts: any

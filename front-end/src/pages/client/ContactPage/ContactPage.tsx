@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import IContact from '../../types/contact';
+import IContact from '../../../types/contact';
 type Props = {
     Onadd: (data: IContact) => void
 }

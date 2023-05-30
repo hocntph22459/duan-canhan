@@ -1,11 +1,11 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import LayoutClient from "../layouts/client/LayoutClient";
-import NotFoundPage from "../pages/client/NotFoundPage";
+import NotFoundPage from "../pages/client/404";
 import SignupPage from "../pages/client/SignupPage";
 import SigninPage from "../pages/client/SigninPage";
-import Homepage from "../pages/client/Homepage";
+import Homepage from "../pages/client/HomePage";
 import PostPage from "../pages/client/PostPage";
-import PostDetail from "../pages/client/PostDetail";
+import PostDetail from "../pages/client/Postdetail";
 import ContactPage from "../pages/client/ContactPage";
 import LayoutAdmin from "../layouts/admin";
 import react, { useEffect, useState } from "react";
@@ -87,7 +87,7 @@ const Router = () => {
     }
 
     // api category
-    const [categories, setcategories] = useState([])
+    const [categories, setcategories] = useState<ICategory[]>([])
     useEffect(() => {
         GetAllCategory()
             .then(({ data }) => setcategories(data.data))

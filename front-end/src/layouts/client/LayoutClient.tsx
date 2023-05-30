@@ -18,7 +18,6 @@ const LayoutClient = (props: Props) => {
     const [searchText, setSearchText] = useState("");
     const [searchResults, setSearchResults] = useState<IPost[]>([]);
     const data = props.posts
-    console.log(data)
     const handleSearch = (value: string) => {
         setSearchText(value);
         const results = data.filter((post: IPost) =>

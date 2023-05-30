@@ -2,8 +2,8 @@ import React, { useRef, useState } from 'react';
 import { Button, Col, Form, FormItemProps, Input } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import { message } from "antd"
-import { Signup } from '../../api/auth';
-import IUser from '../../types/user';
+import { Signup } from '../../../api/auth';
+import IUser from '../../../types/user';
 import ReCAPTCHA from 'react-google-recaptcha';
 const MyFormItemContext = React.createContext<(string | number)[]>([]);
 
@@ -15,7 +15,7 @@ const MyFormItem = ({ name, ...props }: FormItemProps) => {
     const concatName = name !== undefined ? [...prefixPath, ...toArr(name)] : undefined;
     return <Form.Item name={concatName} {...props} />;
 };
-const SigupPage = () => {
+const SignupPage = () => {
     const [isVerified, setIsVerified] = useState<boolean>(false);
     const recaptchaRef = useRef<ReCAPTCHA>(null);
     const navigate = useNavigate();
@@ -138,4 +138,4 @@ const SigupPage = () => {
     );
 };
 
-export default SigupPage;
+export default SignupPage;
