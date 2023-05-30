@@ -25,6 +25,7 @@ interface Post {
 
 interface Tag {
     _id: string;
+    key: string,
     name: string;
     posts: string[];
     createdAt: string;

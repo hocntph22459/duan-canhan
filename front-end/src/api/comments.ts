@@ -17,17 +17,11 @@ export const UpdateComment = (data: IComment) => {
     return intansce.put('/comments/' + data._id, data)
 }
 
-export const RemoveComment = async (_id: string) => {
-    try {
-        const response = await intansce.delete(`/comments/${_id}`, {
+export const RemoveComment = (_id: string) => {
+        return intansce.delete(`/comments/${_id}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
             },
         });
-        if (response && response.data) {
-            return response;
-        }
-    } catch (error) {
-        console.log(error);
-    }
+
 }

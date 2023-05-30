@@ -1,5 +1,6 @@
 interface IAbout {
     _id: string;
+    key: string,
     name: string,
     email: string,
     phone: number,

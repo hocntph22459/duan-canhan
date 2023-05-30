@@ -47,7 +47,7 @@ const ManageCategory = (props: Props) => {
     },
     {
       title: 'action',
-      render: (item: any) => <>
+      render: (item: ICategory) => <>
         <Button href={`/admin/categories/${item.key}/update`}>update</Button>
         <Button onClick={() => HandleRemove(item.key)}>delete</Button>
       </>

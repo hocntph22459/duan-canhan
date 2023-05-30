@@ -1,10 +1,10 @@
+import React, { useRef, useState } from 'react';
 import { Button, Col, Form, FormItemProps, Input } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import { message } from "antd"
-import React from 'react';
 import { Signup } from '../../api/auth';
 import IUser from '../../types/user';
-
+import ReCAPTCHA from 'react-google-recaptcha';
 const MyFormItemContext = React.createContext<(string | number)[]>([]);
 
 function toArr(str: string | number | (string | number)[]): (string | number)[] {
@@ -16,23 +16,40 @@ const MyFormItem = ({ name, ...props }: FormItemProps) => {
     return <Form.Item name={concatName} {...props} />;
 };
 const SigupPage = () => {
+    const [isVerified, setIsVerified] = useState<boolean>(false);
+    const recaptchaRef = useRef<ReCAPTCHA>(null);
     const navigate = useNavigate();
     const onFinish = async (value: IUser) => {
-        const key = 'loading'
-        if (value) {
-            try {
-                const response = await Signup(value);
-                const loading = await message.loading({ content: 'đang xử lý!', key, duration: 2 })
-                if (loading) {
-                    if (response && response.data) {
-                        message.success(response.data.message, 3);
-                        navigate('/signin')
+        if (isVerified == true) {
+            const key = 'loading'
+            if (value) {
+                try {
+                    const loading = await message.loading({ content: 'đang xử lý!', key, duration: 2 })
+                    if (loading) {
+                        const response = await Signup(value);
+                        if (response && response.data) {
+                            message.success(response.data.message, 3);
+                            navigate('/signin')
+                        }
                     }
-                }
 
-            } catch (error: any) {
-                message.error(error.response.data.message, 5);
+                } catch (error: any) {
+                    message.error(error.response.data.message, 5);
+                }
             }
+        }
+    };
+
+    const handleRecaptcha = (value: string | null) => {
+        if (value) {
+            setIsVerified(true);
+        }
+    };
+
+    const resetRecaptcha = () => {
+        setIsVerified(false);
+        if (recaptchaRef.current) {
+            recaptchaRef.current.reset();
         }
     };
     return (
@@ -90,6 +107,20 @@ const SigupPage = () => {
                 >
                     <Input placeholder="nhập password" />
                 </MyFormItem>
+                <div>
+                    <ReCAPTCHA
+                        ref={recaptchaRef}
+                        sitekey="6Ld_Ek8mAAAAAKtnDYdUCNiClx9m52L_aafio6we"
+                        onChange={handleRecaptcha}
+                    />
+                    {isVerified ? (
+                        <p>Xác thực thành công!</p>
+                    ) : (
+                        <p className='text-[red]'>Vui lòng xác thực bằng Recaptcha trước khi tiếp tục.</p>
+                    )}
+                    <button onClick={resetRecaptcha}>Reset Recaptcha</button>
+                </div>
+
                 <Button
                     htmlType="submit"
                     className="w-full text-center h-12 py-3 rounded bg-[black] text-white hover:bg-green-dark focus:outline-none my-1"

@@ -55,7 +55,7 @@ const ManagePost = (props: Props) => {
     },
     {
       title: 'action',
-      render: (item: any) => <>
+      render: (item: IPost) => <>
         <Button href={`/admin/post/${item.key}/update`}>update</Button>
         <Button onClick={() => HandleRemove(item.key)}>delete</Button>
       </>

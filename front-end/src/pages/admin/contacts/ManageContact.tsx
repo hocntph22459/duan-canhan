@@ -65,7 +65,7 @@ const ManageContact = (props: Props) => {
     },
     {
       title: 'action',
-      render: (item: any) => <>
+      render: (item: IContact) => <>
         <Button onClick={() => HandleRemove(item.key)}>delete</Button>
       </>
     },

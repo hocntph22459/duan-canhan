@@ -1,5 +1,6 @@
 export interface ICategory {
     _id: string;
+    key: string,
     name: string,
     posts: IPost[],
     createdAt?: Date;

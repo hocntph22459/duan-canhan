@@ -46,7 +46,7 @@ const ManageComment = (props: Props) => {
     },
     {
       title: 'action',
-      render: (item: any) => <>
+      render: (item: IComment) => <>
         <Button onClick={() => HandleRemove(item.key)}>delete</Button>
       </>
     },

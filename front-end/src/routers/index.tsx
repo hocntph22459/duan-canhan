@@ -86,7 +86,6 @@ const Router = () => {
         }
     }
 
-
     // api category
     const [categories, setcategories] = useState([])
     useEffect(() => {
@@ -145,7 +144,6 @@ const Router = () => {
         }
     }
 
-
     // api comment 
     const [comments, setcomments] = useState([])
     useEffect(() => {
@@ -185,7 +183,6 @@ const Router = () => {
             }
         }
     }
-
 
     // api contact 
     const [contacts, setcontacts] = useState([])
@@ -227,7 +224,6 @@ const Router = () => {
         }
     }
 
-
     // api users 
     const [users, setusers] = useState([])
     useEffect(() => {
@@ -253,7 +249,7 @@ const Router = () => {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path='/' element={<LayoutClient />}>
+                <Route path='/' element={<LayoutClient posts={posts}/>}>
                     <Route index element={<Homepage categories={categories} />} />
                     <Route path='post'>
                         <Route index element={<PostPage posts={posts} categories={categories} />} />

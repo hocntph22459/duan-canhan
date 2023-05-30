@@ -1,5 +1,6 @@
 interface IComment {
     _id: string;
+    key: string,
     content: string,
     post: string,
     user:string,

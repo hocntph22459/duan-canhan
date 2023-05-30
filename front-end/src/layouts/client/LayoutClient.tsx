@@ -1,29 +1,27 @@
 import { Link, Outlet } from 'react-router-dom'
 import { Menu, Input } from "antd";
 import { useState } from "react";
-type Props = {}
-interface Post {
-    id: number;
-    title: string;
-    content: string;
+import { IPost } from '../../types/post';
+type Props = {
+    posts: IPost[]
 }
+// interface Post {
+//     id: number;
+//     title: string;
+//     content: string;
+// }
 
-interface Data {
-    posts: Post[];
-}
+// interface Data {
+//     posts: Post[];
+// }
 const LayoutClient = (props: Props) => {
     const [searchText, setSearchText] = useState("");
-    const [searchResults, setSearchResults] = useState<Post[]>([]);
-    const data: Data = {
-        posts: [
-            { id: 1, title: "Introduction to React", content: "This is an introduction to React." },
-            { id: 2, title: "React Components", content: "This is a tutorial on React components." },
-            { id: 3, title: "React Hooks", content: "This is a tutorial on React hooks." },
-        ],
-    };
+    const [searchResults, setSearchResults] = useState<IPost[]>([]);
+    const data = props.posts
+    console.log(data)
     const handleSearch = (value: string) => {
         setSearchText(value);
-        const results = data.posts.filter((post) =>
+        const results = data.filter((post: IPost) =>
             post.title.toLowerCase().includes(value.toLowerCase())
         );
         setSearchResults(results);
@@ -61,8 +59,8 @@ const LayoutClient = (props: Props) => {
                                 />
                             </Menu.Item>
                             {searchResults &&
-                                searchResults.map((result) => (
-                                    <Menu.Item key={result.id}>{result.title}</Menu.Item>
+                                searchResults.map((result: IPost) => (
+                                    <a href={`/post/${result._id}`} key={result._id}>{result.title}</a>
                                 ))}
                         </Menu>
                     </div>

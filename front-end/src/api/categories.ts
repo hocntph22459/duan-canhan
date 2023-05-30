@@ -9,47 +9,27 @@ export const GetOneCategory = (_id: string) => {
     return intansce.get('/categories/' + _id)
 }
 
-export const CreateCategory = async (data: ICategory) => {
-    try {
-        const response = await intansce.post(`/categories`, data, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-            },
-        });
-        if (response && response.data) {
-            return response;
-        }
-    } catch (error) {
-        console.log(error);
-    }
+export const CreateCategory = (data: ICategory) => {
+    return intansce.post(`/categories`, data, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+    });
+
 }
 
-export const UpdateCategory = async (data: ICategory) => {
-    try {
-        const response = await intansce.put(`/categories/${data._id}`, data, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-            },
-        });
-        if (response && response.data) {
-            return response;
-        }
-    } catch (error) {
-        console.log(error);
-    }
+export const UpdateCategory = (data: ICategory) => {
+    return intansce.put(`/categories/${data._id}`, data, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+    });
 }
 
-export const RemoveCategory = async (_id: string) => {
-    try {
-        const response = await intansce.delete(`/categories/${_id}`, {
+export const RemoveCategory = (_id: string) => {
+        return intansce.delete(`/categories/${_id}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
             },
         });
-        if (response && response.data) {
-            return response;
-        }
-    } catch (error) {
-        console.log(error);
-    }
 }

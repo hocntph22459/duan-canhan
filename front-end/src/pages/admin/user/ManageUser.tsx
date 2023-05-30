@@ -59,7 +59,7 @@ const ManageUser = (props: Props) => {
     },
     {
       action: 'name',
-      render: (item: any) => <>
+      render: (item: IUser) => <>
         {item.role === 'admin' ? <Button hidden>delete</Button> :
           <Button onClick={() => HandleRemove(item.key)} >Delete</Button>
         }

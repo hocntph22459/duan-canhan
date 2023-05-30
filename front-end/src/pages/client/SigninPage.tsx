@@ -1,34 +1,53 @@
+import React, { useRef, useState } from 'react';
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom";
 import { Signin } from "../../api/auth";
 import { message } from "antd"
+import ReCAPTCHA from 'react-google-recaptcha';
 const SigninPage = () => {
+    const [isVerified, setIsVerified] = useState<boolean>(false);
+    const recaptchaRef = useRef<ReCAPTCHA>(null);
     const navigate = useNavigate()
     const { register, handleSubmit, formState: { errors }, } = useForm();
     const onSubmit = async (data: any) => {
-        const key = 'loading'
-        if (data) {
-            try {
-                const response = await Signin(data);
-                const loading = await message.loading({ content: 'đang xử lý!', key, duration: 2 })
-                if (loading) {
-                    if (response.data.user.role === 'admin') {
-                        navigate('/admin')
-                    } else {
-                        navigate('/')
+        if (isVerified == true) {
+            const key = 'loading'
+            if (data) {
+                try {
+                    const loading = await message.loading({ content: 'đang xử lý!', key, duration: 2 })
+                    if (loading) {
+                        const response = await Signin(data);
+                        if (response.data.user.role === 'admin') {
+                            navigate('/admin')
+                        } else {
+                            navigate('/')
+                        }
+                        if (response && response.data) {
+                            message.success(response.data.message, 3);
+                            localStorage.setItem('accessToken', (response.data.accessToken));
+                            localStorage.setItem('user', JSON.stringify(response.data.user));
+                        }
                     }
-                    if (response && response.data) {
-                        message.success(response.data.message, 3);
-                        localStorage.setItem('accessToken',(response.data.accessToken));
-                        localStorage.setItem('user', JSON.stringify(response.data.user));
-                    }
-                }
 
-            } catch (error: any) {
-                message.error(error.response.data.message, 3);
+                } catch (error: any) {
+                    message.error(error.response.data.message, 3);
+                }
             }
         }
     }
+
+    const handleRecaptcha = (value: string | null) => {
+        if (value) {
+            setIsVerified(true);
+        }
+    };
+
+    const resetRecaptcha = () => {
+        setIsVerified(false);
+        if (recaptchaRef.current) {
+            recaptchaRef.current.reset();
+        }
+    };
     return (
         <section className="bg-gray-50 dark:bg-gray-900">
             <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -73,6 +92,19 @@ const SigninPage = () => {
                                     placeholder="••••••••"
                                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 />
+                            </div>
+                            <div>
+                                <ReCAPTCHA
+                                    ref={recaptchaRef}
+                                    sitekey="6Ld_Ek8mAAAAAKtnDYdUCNiClx9m52L_aafio6we"
+                                    onChange={handleRecaptcha}
+                                />
+                                {isVerified ? (
+                                    <p>Xác thực thành công!</p>
+                                ) : (
+                                    <p className='text-[red]'>Vui lòng xác thực bằng Recaptcha trước khi tiếp tục.</p>
+                                )}
+                                <button onClick={resetRecaptcha}>Reset Recaptcha</button>
                             </div>
                             <div className="flex items-center justify-between">
                                 <div className="flex items-start">
