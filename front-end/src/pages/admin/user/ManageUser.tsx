@@ -1,33 +1,39 @@
-import { Table, Button, Empty, Input } from 'antd';
+import { Table, Button, Empty, Input, message, Popconfirm } from 'antd';
 import Swal from 'sweetalert2';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import IUser from '../../../types/user';
-type Props = {
-  users: IUser[]
-  Onremove: (id: string) => void
-}
-const ManageUser = (props: Props) => {
+import { GetAllUser, RemoveUser } from '../../../api/user';
+
+const ManageUser = () => {
   const [Search, setSeach] = useState("");
-  const HandleRemove = async (id: string) => {
-    Swal.fire({
-      title: 'Bạn có muốn xóa?',
-      text: 'Bạn sẽ không thể hoàn nguyên điều này!',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Xóa',
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        props.Onremove(id)
+  // api users 
+  const [users, setusers] = useState<IUser[]>([])
+  useEffect(() => {
+    GetAllUser().then(({ data }) => setusers(data.data))
+  }, [])
+  const HandleRemoveUser = async (id: string) => {
+    const key = 'loading';
+    try {
+      const loading = await message.loading({ content: 'đang xử lý!', key, duration: 2 });
+      if (loading) {
+        const response = await RemoveUser(id);
+        if (response)
+          message.success(response.data.message, 3);
+        GetAllUser().then(({ data }) => setusers(data.data))
       }
-    });
+    } catch (error: any) {
+      if (error.response) {
+        message.error(error.response.data.message, 5);
+      } else {
+        message.error('Có lỗi xảy ra, vui lòng thử lại sau.', 5);
+      }
+    }
   }
   const columns = [
     {
-      title: '#',
-      dataIndex: 'key',
-      key: 'key'
+      title: 'stt',
+      dataIndex: 'index',
+      key: 'index'
     },
     {
       title: 'name',
@@ -58,17 +64,25 @@ const ManageUser = (props: Props) => {
       key: 'createdAt'
     },
     {
-      action: 'name',
+      title: 'action',
       render: (item: IUser) => <>
         {item.role === 'admin' ? <Button hidden>delete</Button> :
-          <Button onClick={() => HandleRemove(item.key)} >Delete</Button>
+          <Popconfirm
+            title="Delete the task"
+            description="Are you sure to delete this task?"
+            okText="Yes"
+            cancelText="No"
+          >
+            <button className='bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded' onClick={() => HandleRemoveUser(item.key)} >Delete</button>
+          </Popconfirm>
         }
       </>
     },
   ];
 
-  const data = props.users.map(item => {
+  const data = users.map((item:IUser,index:number) => {
     return {
+      index: index,
       key: item._id,
       name: item.name,
       email: item.email,

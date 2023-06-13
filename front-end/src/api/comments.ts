@@ -14,7 +14,11 @@ export const CreateComment = (data: IComment) => {
 }
 
 export const UpdateComment = (data: IComment) => {
-    return intansce.put('/comments/' + data._id, data)
+    return intansce.put('/comments/' + data._id, data, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+    })
 }
 
 export const RemoveComment = (_id: string) => {

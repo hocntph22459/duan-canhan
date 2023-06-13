@@ -8,3 +8,7 @@ export const Signup = (data:IUser) => {
 export const Signin = (data:IUser) => {
     return intansce.post('/auth/signin',data)
 }
+
+export const ForgotPass = (data:IUser) => {
+    return intansce.post('/auth/forgotpassword',data)
+}

@@ -1,3 +1,3 @@
-import HeaderLayout from './HeaderLayout';
+import HeaderLayoutAdmin from './HeaderLayoutAdmin';
 
-export default HeaderLayout;
+export default HeaderLayoutAdmin;

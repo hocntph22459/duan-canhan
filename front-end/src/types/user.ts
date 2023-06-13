@@ -1,6 +1,6 @@
 interface IUser {
     _id: string;
-    key: string,
+    key: string;
     name: string,
     email: string,
     password: string,
@@ -9,4 +9,4 @@ interface IUser {
     updatedAt?: Date;
     deletedAt?: Date | null,
 }
-export default IUser
+export default IUser 

@@ -5,7 +5,7 @@ const RouterCategory = express.Router();
 
 RouterCategory.get("/", getAllCategory);
 RouterCategory.get("/:id", getOneCategory);
-RouterCategory.post("/",checkPermission, createCategory);
+RouterCategory.post("/", createCategory);
 RouterCategory.put("/:id",checkPermission, updateCategory);
 RouterCategory.delete("/:id",checkPermission, removeCategory);
 

@@ -1,10 +1,10 @@
 import HashTag from "../models/hashtag";
 import HashTagSchema from "../validates/hashtag";
-import Post from "../models/post"
+import Product from "../models/product";
 
 export const getAllHashTag = async (req, res) => {
     try {
-        const tags = await HashTag.find().populate("posts");
+        const tags = await HashTag.find().populate("products");
         if (tags.length === 0) {
             return res.json({
                 message: "Không có hashtag nào",
@@ -15,14 +15,14 @@ export const getAllHashTag = async (req, res) => {
             data: tags
         });
     } catch (error) {
-        return res.status(404).json({
+        return res.status(500).json({
             message: error.message,
         });
     }
 };
 export const getOneHashTag = async function (req, res) {
     try {
-        const tag = await HashTag.findById(req.params.id).populate("posts");
+        const tag = await HashTag.findById(req.params.id).populate("products");
         if (!tag) {
             return res.json({
                 message: "Không có hashtag nào",
@@ -33,7 +33,7 @@ export const getOneHashTag = async function (req, res) {
             data: tag
         });
     } catch (error) {
-        return res.status(404).json({
+        return res.status(500).json({
             message: error.message,
         });
     }
@@ -65,7 +65,7 @@ export const createHashTag = async function (req, res) {
             data: tag
         });
     } catch (error) {
-        return res.status(404).json({
+        return res.status(500).json({
             message: error.message,
         });
     }
@@ -90,7 +90,7 @@ export const updateHashTag = async function (req, res) {
             data: HashTag
         });
     } catch (error) {
-        return res.status(404).json({
+        return res.status(500).json({
             message: error.message,
         });
     }
@@ -104,8 +104,8 @@ export const removeHashTag = async function (req, res) {
                 message: "Xóa hashtag thất bại",
             });
         } else {
-            const post = await Post.deleteMany({ HashTagId: req.params.id })
-            if (!post) {
+            const product = await Product.deleteMany({ HashTagId: req.params.id })
+            if (!product) {
                 return res.status(400).json({
                     message: "Xóa bài viết liên quan thất bại",
                 });
@@ -116,7 +116,7 @@ export const removeHashTag = async function (req, res) {
             }
         }
     } catch (error) {
-        return res.status(404).json({
+        return res.status(500).json({
             message: error.message,
         });
     }

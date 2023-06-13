@@ -1,15 +1,29 @@
-import { Button, Col, Form, Input, Modal, Row } from 'antd';
+import { Button, Col, Form, Input, Row, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { ICategory } from '../../../types/category';
-type Props = {
-  Onadd: (data: ICategory) => void
-}
-const ManageCategoryAdd = (props: Props) => {
+import { CreateCategory } from '../../../api/categories';
+
+const ManageCategoryAdd = () => {
   const navigate = useNavigate()
   const [form] = Form.useForm();
   const onFinish = async (values: ICategory) => {
-    props.Onadd(values);
-    navigate('/admin/categories')
+    const key = 'loading';
+    try {
+      const loading = await message.loading({ content: 'đang xử lý!', key, duration: 2 });
+      if (loading) {
+        const response = await CreateCategory(values);
+        if (response)
+          message.success(response.data.message, 3);
+        navigate('/admin/categories')
+        // GetAllCategory().then(({ data }) => setcategories(data));
+      }
+    } catch (error: any) {
+      if (error.response) {
+        message.error(error.response.data.message, 5);
+      } else {
+        message.error('Có lỗi xảy ra, vui lòng thử lại sau.', 5);
+      }
+    }
   };
   return (
     <Form layout="vertical" autoComplete="off" form={form} onFinish={onFinish}>

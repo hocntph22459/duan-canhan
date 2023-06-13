@@ -12,9 +12,9 @@ const CommentModel = new mongoose.Schema({
         ref: "User",
         require: true 
     },
-    post: {
+    product: {
         type: mongoose.Types.ObjectId,
-        ref: "Post",
+        ref: "Product",
         require: true
     }
 }, {

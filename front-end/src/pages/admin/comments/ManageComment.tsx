@@ -1,33 +1,38 @@
 import { Table, Button, Empty, Input, message } from 'antd';
-import Swal from 'sweetalert2';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import IComment from '../../../types/comment';
-type Props = {
-  comments: IComment[]
-  Onremove: (id: string) => void
-}
-const ManageComment = (props: Props) => {
+import { GetAllComment, RemoveComment } from '../../../api/comments';
+
+const ManageComment = () => {
   const [Search, setSeach] = useState("");
-  const HandleRemove = async (id: string) => {
-    Swal.fire({
-      title: 'Bạn có muốn xóa?',
-      text: 'Bạn sẽ không thể hoàn nguyên điều này!',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Xóa',
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        props.Onremove(id)
-      }
-    });
-  }
+ // api comment 
+ const [comments, setcomments] = useState<IComment[]>([])
+ useEffect(() => {
+     GetAllComment().then(({ data }) => setcomments(data.data))
+ }, [])
+ const HandleRemoveComment = async (id: string) => {
+     const key = 'loading';
+     try {
+         const loading = await message.loading({ content: 'đang xử lý!', key, duration: 2 });
+         if (loading) {
+             const response = await RemoveComment(id);
+             if (response)
+                 message.success(response.data.message, 3);
+             GetAllComment().then(({ data }) => setcomments(data.data))
+         }
+     } catch (error: any) {
+         if (error.response) {
+             message.error(error.response.data.message, 5);
+         } else {
+             message.error('Có lỗi xảy ra, vui lòng thử lại sau.', 5);
+         }
+     }
+ }
   const columns = [
     {
-      title: '#',
-      dataIndex: 'key',
-      key: 'key'
+      title: 'stt',
+      dataIndex: 'index',
+      key: 'index'
     },
     {
       title: 'content',
@@ -35,9 +40,9 @@ const ManageComment = (props: Props) => {
       key: 'content'
     },
     {
-      title: 'PostId',
-      dataIndex: 'PostId',
-      key: 'PostId'
+      title: 'product',
+      dataIndex: 'product',
+      key: 'product'
     },
     {
       title: 'created At',
@@ -47,17 +52,18 @@ const ManageComment = (props: Props) => {
     {
       title: 'action',
       render: (item: IComment) => <>
-        <Button onClick={() => HandleRemove(item.key)}>delete</Button>
+        <Button className='bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded' onClick={() => HandleRemoveComment(item.key)}>delete</Button>
       </>
     },
   ];
 
-  const listData = props.comments.map(item => {
+  const listData = comments.map((item:IComment,index:number) => {
     return {
+      index: index,
       key: item._id,
       content: item.content,
       createdAt: item.createdAt,
-      PostId: item.post
+      product: item.product
     }
   })
   if (listData.length == 0)

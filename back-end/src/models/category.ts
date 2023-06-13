@@ -9,10 +9,10 @@ const CategoryModel = new mongoose.Schema({
     required: true,
     minLength: 3,
   },
-  posts: [ 
+  products: [
     {
       type: mongoose.Types.ObjectId,
-      ref: 'Post',
+      ref: 'Product',
     },
   ],
 }, {
@@ -21,7 +21,7 @@ const CategoryModel = new mongoose.Schema({
   toJSON: {
     virtuals: true,
     transform: (doc, ret) => {
-      ret.createdAt = moment(ret.createdAt).format('DD/MM/YYYY HH:mm:ss'); 
+      ret.createdAt = moment(ret.createdAt).format('DD/MM/YYYY HH:mm:ss');
       ret.updatedAt = moment(ret.updatedAt).format('DD/MM/YYYY HH:mm:ss');
       delete ret.id;
     },

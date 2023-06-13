@@ -1,3 +1,3 @@
-import SidebarLayout from './SidebarLayout';
+import SidebarLayoutAdmin from './SidebarLayoutAdmin';
 
-export default SidebarLayout;
+export default SidebarLayoutAdmin;

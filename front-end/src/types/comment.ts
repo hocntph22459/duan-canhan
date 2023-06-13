@@ -1,11 +1,11 @@
 interface IComment {
     _id: string;
-    key: string,
+    key: string;
     content: string,
-    post: string,
-    user:string,
-    createdAt?: any;
+    product: string,
+    user: string,
+    createdAt?: Date;
     updatedAt?: Date;
     deletedAt?: Date | null,
 }
-export default IComment
+export default IComment 

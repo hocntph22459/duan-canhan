@@ -4,7 +4,7 @@ export const getAllContact = async (req, res) => {
     try {
         const contact = await Contact.find()
         if (contact.length === 0) {
-            return res.status(400).json({
+            return res.status(404).json({
                 message: "Không có liên hệ nào",
             });
         }
@@ -13,7 +13,7 @@ export const getAllContact = async (req, res) => {
             data: contact
         });
     } catch (error) {
-        return res.status(404).json({
+        return res.status(500).json({
             message: error.message,
         });
     }
@@ -23,7 +23,7 @@ export const getOneContact = async function (req, res) {
     try {
         const contact = await Contact.findById(req.params.id)
         if (!contact) {
-            return res.status(400).json({
+            return res.status(404).json({
                 message: "Không tìm thấy liên hệ",
             });
         }
@@ -32,7 +32,7 @@ export const getOneContact = async function (req, res) {
             data: contact
         });
     } catch (error) {
-        return res.status(404).json({
+        return res.status(500).json({
             message: error.message,
         });
     }
@@ -42,27 +42,22 @@ export const createContact = async function (req, res) {
         const { error } = contactSchema.validate(req.body, { abortEarly: false });
         if (error) {
             const errors = error.details.map((err) => err.message);
-            return res.status(400).json({
+            return res.status(404).json({
                 message: errors,
             });
         }
         const contact = await Contact.create(req.body);
         if (!contact) {
-            return res.status(400).json({
+            return res.status(404).json({
                 message: "Không thể gửi liên hệ",
             });
         }
-        // await User.findByIdAndUpdate(contact.UserId, {
-        //     $addToSet: {
-        //         contacts: contact._id,
-        //     },
-        // });
         return res.status(200).json({
             message: "gửi liên hệ thành công",
             data: contact,
         });
     } catch (error) {
-        return res.status(404).json({
+        return res.status(500).json({
             message: error.message,
         });
     }
@@ -72,13 +67,13 @@ export const updateContact = async function (req, res) {
         const { error } = contactSchema.validate(req.body, { abortEarly: false });
         if (error) {
             const errors = error.details.map((err) => err.message);
-            return res.status(400).json({
+            return res.status(404).json({
                 message: errors,
             });
         }
         const contact = await Contact.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!contact) {
-            return res.status(400).json({
+            return res.status(404).json({
                 message: "Cập nhật liên hệ không thành công",
             });
         }
@@ -87,7 +82,7 @@ export const updateContact = async function (req, res) {
             data: contact,
         });
     } catch (error) {
-        return res.status(404).json({
+        return res.status(500).json({
             message: error.message,
         });
     }
@@ -100,7 +95,7 @@ export const removeContact = async function (req, res) {
             contact,
         });
     } catch (error) {
-        return res.status(404).json({
+        return res.status(500).json({
             message: error.message,
         });
     }

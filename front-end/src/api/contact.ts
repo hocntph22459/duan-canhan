@@ -14,7 +14,11 @@ export const CreateContact = (data: IContact) => {
 }
 
 export const UpdateContact = (data: IContact) => {
-    return intansce.put('/contacts/' + data._id, data)
+    return intansce.put('/contacts/' + data._id, data, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+    })
 }
 
 export const RemoveContact = (_id: string) => {

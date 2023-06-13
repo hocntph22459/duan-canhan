@@ -1,10 +1,10 @@
 import Category from "../models/category";
-import Post from "../models/post";
+import Product from "../models/product";
 import categorySchema from "../validates/category";
 
 export const getAllCategory = async (req, res) => {
     try {
-        const categories = await Category.find().populate("posts");
+        const categories = await Category.find().populate("products");
         if (categories.length === 0) {
             return res.json({
                 message: "Không có danh mục nào",
@@ -15,14 +15,14 @@ export const getAllCategory = async (req, res) => {
             data: categories
         });
     } catch (error) {
-        return res.status(404).json({
+        return res.status(500).json({
             message: error.message,
         });
     }
 };
 export const getOneCategory = async function (req, res) {
     try {
-        const category = await Category.findById(req.params.id).populate("posts");
+        const category = await Category.findById(req.params.id).populate("products");
         if (!category) {
             return res.json({
                 message: "Không có danh mục nào",
@@ -33,7 +33,7 @@ export const getOneCategory = async function (req, res) {
             data: category
         });
     } catch (error) {
-        return res.status(404).json({
+        return res.status(500).json({
             message: error.message,
         });
     }
@@ -43,20 +43,20 @@ export const createCategory = async function (req, res) {
         const { error } = categorySchema.validate(req.body, { abortEarly: false });
         if (error) {
             const errors = error.details.map((err) => err.message);
-            return res.status(400).json({
+            return res.status(404).json({
                 message: errors,
             });
         }
         const { name } = req.body
         const categoryExists = await Category.findOne({ name });
         if (categoryExists) {
-            return res.status(400).json({
+            return res.status(404).json({
                 message: "danh mục đã tồn tại",
             });
         }
         const category = await Category.create(req.body);
         if (!category) {
-            return res.status(400).json({
+            return res.status(404).json({
                 message: "Không thêm được danh mục",
             });
         }
@@ -65,7 +65,7 @@ export const createCategory = async function (req, res) {
             data: category
         });
     } catch (error) {
-        return res.status(404).json({
+        return res.status(500).json({
             message: error.message,
         });
     }
@@ -75,13 +75,13 @@ export const updateCategory = async function (req, res) {
         const { name } = req.body
         const categoryExists = await Category.findOne({ name });
         if (categoryExists) {
-            return res.status(400).json({
+            return res.status(404).json({
                 message: "danh mục đã tồn tại",
             });
         }
         const category = await Category.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!category) {
-            return res.status(400).json({
+            return res.status(404).json({
                 message: "Cập nhật danh mục không thành công",
             });
         }
@@ -90,7 +90,7 @@ export const updateCategory = async function (req, res) {
             data: category
         });
     } catch (error) {
-        return res.status(404).json({
+        return res.status(500).json({
             message: error.message,
         });
     }
@@ -100,13 +100,13 @@ export const removeCategory = async function (req, res) {
         // Xoá danh mục và sản phẩm liên quan
         const categories = await Category.findByIdAndDelete(req.params.id)
         if (!categories) {
-            return res.status(400).json({
+            return res.status(404).json({
                 message: "Xóa danh mục thất bại",
             });
         } else {
-            const post = await Post.deleteMany({ CategoryId: req.params.id })
-            if (!post) {
-                return res.status(400).json({
+            const product = await Product.deleteMany({ CategoryId: req.params.id })
+            if (!product) {
+                return res.status(404).json({
                     message: "Xóa sản phẩm liên quan thất bại",
                 });
             } else {
@@ -116,7 +116,7 @@ export const removeCategory = async function (req, res) {
             }
         }
     } catch (error) {
-        return res.status(404).json({
+        return res.status(500).json({
             message: error.message,
         });
     }

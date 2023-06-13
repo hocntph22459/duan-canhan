@@ -1,133 +1,57 @@
-import { ICategory } from '../../../types/category'
-import ListPost from './components/ListPost'
-type Props = {
-  categories: ICategory[]
-}
+import { SearchOutlined } from '@ant-design/icons'
+import { Input, message } from 'antd';
+import { useState } from 'react';
+import { SearchProduct } from '../../../api/product';
+import ListProductByCategories from './components/ListProductByCategories';
+import { IProduct } from '../../../types/product';
+import FindProduct from './components/FindProduct';
 
-const Homepage = ({categories}: Props) => {
+const Homepage = () => {
+  const [query, setQuery] = useState('');
+  const [products, setProducts] = useState<IProduct[]>([]);
+  const handleSearch = async (value: string) => {
+    try {
+      setQuery(value);
+      const response = await SearchProduct(value)
+      setProducts(response.data.data);
+    } catch (error: any) {
+      message.warning(error.response.data.message);
+    }
+  };
   return (
-    <>
-      <div className="md:flex flex-no-wrap space-x-0 md:space-x-6 mb-16 xl:mt-[100px]">
-        {/* main post */}
-        <div className="mb-4 lg:mb-0  p-4 lg:p-0 w-full md:w-4/7 relative rounded block">
-          <img
-            src="https://images.unsplash.com/photo-1427751840561-9852520f8ce8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=900&q=60"
-            className="rounded-md object-cover w-full h-64"
-          />
-          <span className="text-green-700 text-sm hidden md:block mt-4">
-            {" "}
-            Technology{" "}
-          </span>
-          <h1 className="text-gray-800 text-4xl font-bold mt-2 mb-2 leading-tight">
-            Ignorant branched humanity led now marianne too.
-          </h1>
-          <p className="text-gray-600 mb-4">
-            Necessary ye contented newspaper zealously breakfast he prevailed.
-            Melancholy middletons yet understood decisively boy law she. Answer
-            him easily are its barton little. Oh no though mother be things
-            simple itself. Oh be me, sure wise sons, no. Piqued ye of am spirit
-            regret. Stimulated discretion impossible admiration in particular
-            conviction up.
-          </p>
-          <a
-            href="./blog.html"
-            className="inline-block px-6 py-3 mt-2 rounded-md bg-green-700 text-gray-100"
-          >
-            Read more
-          </a>
-        </div>
-        {/* sub-main posts */}
-        <div className="w-full md:w-4/7">
-          {/* post 1 */}
-          <div className="rounded w-full flex flex-col md:flex-row mb-10">
-            <img
-              src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=900&q=60"
-              className="block md:hidden lg:block rounded-md h-64 md:h-32 m-4 md:m-0"
-            />
-            <div className="bg-white rounded px-4">
-              <span className="text-green-700 text-sm hidden md:block">
-                {" "}
-                Gadgets{" "}
-              </span>
-              <div className="md:mt-0 text-gray-800 font-semibold text-xl mb-2">
-                At every tiled on ye defer do. No attention suspected oh
-                difficult.
-              </div>
-              <p className="block md:hidden p-2 pl-0 pt-1 text-sm text-gray-600">
-                Wonder matter now can estate esteem assure fat roused. Am
-                performed on existence as discourse is. Pleasure friendly at
-                marriage blessing or
-              </p>
-            </div>
-          </div>
-          {/* post 2 */}
-          <div className="rounded w-full flex flex-col md:flex-row mb-10">
-            <img
-              src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=900&q=60"
-              className="block md:hidden lg:block rounded-md h-64 md:h-32 m-4 md:m-0"
-            />
-            <div className="bg-white rounded px-4">
-              <span className="text-green-700 text-sm hidden md:block">
-                {" "}
-                Bitcoin{" "}
-              </span>
-              <div className="md:mt-0 text-gray-800 font-semibold text-xl mb-2">
-                Fond his say old meet cold find come whom. The sir park sake
-                bred.
-              </div>
-              <p className="block md:hidden p-2 pl-0 pt-1 text-sm text-gray-600">
-                Integer commodo, sapien ut vulputate viverra, Integer commodo
-                Integer commodo, sapien ut vulputate viverra, Integer commodo
-              </p>
-            </div>
-          </div>
-          {/* post 3 */}
-          <div className="rounded w-full flex flex-col md:flex-row mb-10">
-            <img
-              src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=900&q=60"
-              className="block md:hidden lg:block rounded-md h-64 md:h-32 m-4 md:m-0"
-            />
-            <div className="bg-white rounded px-4">
-              <span className="text-green-700 text-sm hidden md:block">
-                {" "}
-                Insights{" "}
-              </span>
-              <div className="md:mt-0 text-gray-800 font-semibold text-xl mb-2">
-                Advice me cousin an spring of needed. Tell use paid law ever yet
-                new.
-              </div>
-              <p className="block md:hidden p-2 pl-0 pt-1 text-sm text-gray-600">
-                Meant to learn of vexed if style allow he there. Tiled man stand
-                tears ten joy there terms any widen.
-              </p>
-            </div>
-          </div>
-          {/* post 4 */}
-          <div className="rounded w-full flex flex-col md:flex-row mb-10">
-            <img
-              src="https://images.unsplash.com/photo-1489844097929-c8d5b91c456e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=900&q=60"
-              className="block md:hidden lg:block rounded-md h-64 md:h-32 m-4 md:m-0"
-            />
-            <div className="bg-white rounded px-4">
-              <span className="text-green-700 text-sm hidden md:block">
-                {" "}
-                Cryptocurrency{" "}
-              </span>
-              <div className="md:mt-0 text-gray-800 font-semibold text-xl mb-2">
-                Advice me cousin an spring of needed. Tell use paid law ever yet
-                new.
-              </div>
-              <p className="block md:hidden p-2 pl-0 pt-1 text-sm text-gray-600">
-                Meant to learn of vexed if style allow he there. Tiled man stand
-                tears ten joy there terms any widen.
-              </p>
-            </div>
-          </div>
-        </div>
+    <section className="bg-white py-8">
+      <div className="main-banner">
+        <img src="https://file.hstatic.net/1000376021/file/1920x720_copy_42b3f822c4ca4cd099bfb116931e6361.png" alt="" />
       </div>
-      <ListPost cate={categories}/>
-    </>
+      <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12">
+        <nav id="store" className="w-full z-30 top-0 px-6 py-1">
+          <div className="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 px-2 py-3">
+            <a
+              className="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl "
+              href="#"
+            >
+              Store
+            </a>
+            <div className="flex items-center" id="store-nav-content">
+              <div className="relative flex items-center">
+                <Input.Search
+                  className="w-full max-w-xs p-2 rounded-full bg-[#5765be] focus:bg-white"
+                  placeholder="Search products"
+                  onSearch={handleSearch}
+                  enterButton={<SearchOutlined />}
+                />
+              </div>
+            </div>
+          </div>
+        </nav>
+        {query ? (
+          <FindProduct products={products} />
+        ) : (
+          <ListProductByCategories />
+        )}
+      </div>
+    </section>
   )
 }
 
-export default Homepage
+export default Homepage;

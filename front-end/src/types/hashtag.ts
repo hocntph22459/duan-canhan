@@ -1,23 +1,21 @@
 export default interface IhashTag {
     _id: string;
+    key: string;
     name: string,
-    posts: Post[],
+    products: Product[],
     createdAt?: Date;
     updatedAt?: Date;
     deletedAt?: Date | null,
 }
 
-interface Post {
+export interface Product {
     _id: string;
-    title: string;
-    content: string;
+    name: string;
+    price: string;
     images: string[];
-    author: string;
+    description: string;
     tags: Tag[];
-    views: number;
-    likes: number;
-    comments: Comment[];
-    categoryId: Category[];
+    CategoryId: Category[];
     createdAt?: Date;
     updatedAt?: Date;
     deletedAt?: Date | null,
@@ -25,9 +23,8 @@ interface Post {
 
 interface Tag {
     _id: string;
-    key: string,
     name: string;
-    posts: string[];
+    products: string[];
     createdAt: string;
     updatedAt: string;
 }
@@ -36,7 +33,7 @@ interface Comment {
     _id: string;
     content: string;
     author: string;
-    post: string;
+    product: string;
     createdAt?: Date;
     updatedAt?: Date;
     deletedAt?: Date | null,
@@ -45,7 +42,7 @@ interface Comment {
 interface Category {
     _id: string;
     name: string;
-    posts: string[];
+    products: string[];
     createdAt?: Date;
     updatedAt?: Date;
     deletedAt?: Date | null,

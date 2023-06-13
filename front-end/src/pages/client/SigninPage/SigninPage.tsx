@@ -1,40 +1,50 @@
 import React, { useRef, useState } from 'react';
-import { useForm } from "react-hook-form"
-import { useNavigate } from "react-router-dom";
-import { Signin } from "../../../api/auth";
+import { Button, Form, FormItemProps, Input, Modal } from 'antd';
+import { Link, useNavigate } from 'react-router-dom';
 import { message } from "antd"
+import { Signin } from '../../../api/auth';
+import IUser from '../../../types/user';
 import ReCAPTCHA from 'react-google-recaptcha';
+import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import ForgotPassword from '../ForgotPassword';
+const MyFormItemContext = React.createContext<(string | number)[]>([]);
+
+function toArr(str: string | number | (string | number)[]): (string | number)[] {
+    return Array.isArray(str) ? str : [str];
+}
+const MyFormItem = ({ name, ...props }: FormItemProps) => {
+    const prefixPath = React.useContext(MyFormItemContext);
+    const concatName = name !== undefined ? [...prefixPath, ...toArr(name)] : undefined;
+    return <Form.Item name={concatName} {...props} />;
+};
 const SigninPage = () => {
     const [isVerified, setIsVerified] = useState<boolean>(false);
     const recaptchaRef = useRef<ReCAPTCHA>(null);
-    const navigate = useNavigate()
-    const { register, handleSubmit, formState: { errors }, } = useForm();
-    const onSubmit = async (data: any) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const navigate = useNavigate();
+
+    const onFinish = async (value: IUser) => {
         if (isVerified == true) {
             const key = 'loading'
-            if (data) {
+            if (value) {
                 try {
                     const loading = await message.loading({ content: 'đang xử lý!', key, duration: 2 })
                     if (loading) {
-                        const response = await Signin(data);
-                        if (response.data.user.role === 'admin') {
-                            navigate('/admin')
-                        } else {
-                            navigate('/')
-                        }
-                        if (response && response.data) {
-                            message.success(response.data.message, 3);
+                        const response = await Signin(value);
+                        if (response) {
                             localStorage.setItem('accessToken', (response.data.accessToken));
                             localStorage.setItem('user', JSON.stringify(response.data.user));
+                            message.success(response.data.message, 3);
+                            navigate('/')
                         }
                     }
 
                 } catch (error: any) {
-                    message.error(error.response.data.message, 3);
+                    message.error(error.response.data.message, 5);
                 }
             }
         }
-    }
+    };
 
     const handleRecaptcha = (value: string | null) => {
         if (value) {
@@ -48,111 +58,87 @@ const SigninPage = () => {
             recaptchaRef.current.reset();
         }
     };
+    const showModalSignin = () => {
+        setIsModalOpen(true);
+    };
+    const handleOkSignin = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleCancelSignin = () => {
+        setIsModalOpen(false);
+    };
     return (
-        <section className="bg-gray-50 dark:bg-gray-900">
-            <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-                <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-                    <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-                        <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                            Sign in
-                        </h1>
-                        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 md:space-y-6" action="#">
-                            <div>
-                                <label
-                                    htmlFor="email"
-                                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                                >
-                                    Email
-                                </label>
-                                <input {...register("email", {
-                                    required: true,
-                                    pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                })}
-                                    type="email"
-                                    name="email"
-                                    id="email"
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder="name@company.com"
-                                />
-                            </div>
-                            <div>
-                                <label
-                                    htmlFor="password"
-                                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                                >
-                                    Mật Khẩu
-                                </label>
-                                <input {...register("password", {
-                                    required: true,
-                                    minLength: 6,
-                                })}
-                                    type="password"
-                                    name="password"
-                                    id="password"
-                                    placeholder="••••••••"
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                />
-                            </div>
-                            <div>
-                                <ReCAPTCHA
-                                    ref={recaptchaRef}
-                                    sitekey="6Ld_Ek8mAAAAAKtnDYdUCNiClx9m52L_aafio6we"
-                                    onChange={handleRecaptcha}
-                                />
-                                {isVerified ? (
-                                    <p>Xác thực thành công!</p>
-                                ) : (
-                                    <p className='text-[red]'>Vui lòng xác thực bằng Recaptcha trước khi tiếp tục.</p>
-                                )}
-                                <button onClick={resetRecaptcha}>Reset Recaptcha</button>
-                            </div>
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-start">
-                                    <div className="flex items-center h-5">
-                                        <input
-                                            id="remember"
-                                            aria-describedby="remember"
-                                            type="checkbox"
-                                            className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                                        />
-                                    </div>
-                                    <div className="ml-3 text-sm">
-                                        <label
-                                            htmlFor="remember"
-                                            className="text-gray-500 dark:text-gray-300"
-                                        >
-                                            Lưu thông tin
-                                        </label>
-                                    </div>
-                                </div>
-                                <a
-                                    href="#"
-                                    className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
-                                >
-                                    Quên mật khẩu
-                                </a>
-                            </div>
-                            <button
-                                type="submit"
-                                className="w-full text-center py-3 rounded bg-[black] text-white hover:bg-green-dark focus:outline-none my-1"
-                            >
-                                Đăng nhập
-                            </button>
-                            <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                                bạn chưa có tài khoản?{" "}
-                                <a
-                                    href="/signup"
-                                    className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                                >
-                                    Đăng ký
-                                </a>
-                            </p>
-                        </form>
+        <>
+            <Button className="rounded-md flex space-x-2 w-24 h-10 font-normal text-sm leading-3 text-white bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 focus:bg-indigo-600 hover:bg-indigo-600 duration-150 justify-center items-center" onClick={showModalSignin}>
+                Signin
+            </Button>
+            <Modal footer={null} open={isModalOpen} onOk={handleOkSignin} onCancel={handleCancelSignin}>
+                <Form className="mt-[30px] w-[400px] mx-auto" name="form_item_path" layout="vertical" onFinish={onFinish} autoComplete="off">
+                    <h1 className="text-center mt-4 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                        Sign in
+                    </h1>
+                    <MyFormItem className='text-black font-bold'
+                        name="email"
+                        label="Email"
+                        rules={[
+                            {
+                                message: 'vui lòng nhập email!',
+                                required: true,
+                                type: 'email'
+                            },
+                        ]}
+                    >
+                        <Input className='font-mono border border-indigo-600 h-10' placeholder="nhập email" />
+                    </MyFormItem>
+                    <MyFormItem className='text-black font-bold'
+                        name="password"
+                        label="mật khẩu"
+                        rules={[
+                            {
+                                message: 'vui lòng nhập password!',
+                                required: true,
+                            },
+                        ]}
+                    >
+                        <Input.Password
+                            type='password' className='font-mono border border-indigo-600 h-10' placeholder="nhập password"
+                            iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+                        />
+                    </MyFormItem>
+                    <MyFormItem >
+                        <ReCAPTCHA className=''
+                            ref={recaptchaRef}
+                            sitekey="6Ld_Ek8mAAAAAKtnDYdUCNiClx9m52L_aafio6we"
+                            onChange={handleRecaptcha}
+                        />
+                        {isVerified ? (
+                            <p>Xác thực thành công!</p>
+                        ) : (
+                            <p className='text-[red]'>Vui lòng xác thực bằng Recaptcha trước khi tiếp tục.</p>
+                        )}
+                    </MyFormItem>
+                    <Button
+                        htmlType="submit"
+                        className="w-full h-[52px] text-center py-3 rounded bg-[black] text-white hover:bg-green-dark focus:outline-none my-1"
+                    >
+                        Đăng nhập
+                    </Button>
+                    <div>
+                        <p className="text-sm text-black font-bold dark:text-gray-400">
+                            bạn chưa có tài khoản?{" "}
+                        </p>
+                        <Link className="text-[13px] text-black font-bold" to="/signup">
+                            đăng ký
+                        </Link>
                     </div>
-                </div>
-            </div>
-        </section>
-    )
+                    <div>
+                        <ForgotPassword />
+                    </div>
+                </Form>
+            </Modal>
+        </>
+    );
 }
 
 export default SigninPage

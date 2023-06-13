@@ -1,7 +1,7 @@
 interface IComment {
     _id: string;
     content: string,
-    post: string,
+    product: string,
     user:string,
     createdAt?: Date;
     updatedAt?: Date;

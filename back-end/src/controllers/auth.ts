@@ -9,6 +9,7 @@ dotenv.config()
 const { MAIL_USERNAME } = process.env
 const { MAIL_PASSWORD } = process.env
 const { MAIL_FROM_ADDRESS } = process.env
+const { SECRET_CODE } = process.env;
 export const Signup = async (req, res) => { 
     try {
         // Tạo liên kết xác thực
@@ -127,7 +128,7 @@ export const Signin = async (req, res) => {
             }
         });
 
-        const token = jwt.sign({ _id: user._id }, "hocclnh", { expiresIn: "1h" });
+        const token = jwt.sign({ _id: user._id }, SECRET_CODE, { expiresIn: "1h" });
         user.password = undefined;
         return res.status(200).json({
             message: "Đăng nhập thành công",

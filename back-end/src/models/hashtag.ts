@@ -9,10 +9,10 @@ const HashTagModel = new mongoose.Schema({
     required: true,
     minLength: 3,
   },
-  posts: [ 
+  products: [ 
     {
       type: mongoose.Types.ObjectId,
-      ref: 'Post',
+      ref: 'Product',
     },
   ],
 }, {

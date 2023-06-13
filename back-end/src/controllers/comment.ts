@@ -1,12 +1,11 @@
-import Category from "../models/category";
 import Comment from "../models/comment";
-import Post from "../models/post";
+import Product from "../models/product";
 
 export const getAllComment = async (req, res) => {
     try {
         const comment = await Comment.find()
         if (comment.length === 0) {
-            return res.status(400).json({
+            return res.status(404).json({
                 message: "Không có bình luận nào",
             });
         } 
@@ -15,7 +14,7 @@ export const getAllComment = async (req, res) => {
             data: comment
         });
     } catch (error) {
-        return res.status(404).json({
+        return res.status(500).json({
             message: error.message,
         });
     }
@@ -25,7 +24,7 @@ export const getOneComment = async function (req, res) {
     try {
         const comment = await Comment.findById(req.params.id)
         if (!comment) {
-            return res.status(400).json({
+            return res.status(404).json({
                 message: "Không tìm thấy bình luận",
             });
         }
@@ -34,7 +33,7 @@ export const getOneComment = async function (req, res) {
             data: comment
         });
     } catch (error) {
-        return res.status(404).json({
+        return res.status(500).json({
             message: error.message,
         });
     }
@@ -43,16 +42,16 @@ export const createComment = async function (req, res) {
     try {
         const comment = await Comment.create(req.body);
         if (!comment) {
-            return res.status(400).json({
+            return res.status(404).json({
                 message: "Không thể thêm bình luận",
             });
         }
-        await Post.findByIdAndUpdate(comment.post, {
+        await Product.findByIdAndUpdate(comment.product, {
             $addToSet: {
                 Comments: comment._id,
             },
         });
-        await Post.findByIdAndUpdate(comment.user, {
+        await Product.findByIdAndUpdate(comment.user, {
             $addToSet: {
                 Comments: comment._id,
             },
@@ -62,7 +61,7 @@ export const createComment = async function (req, res) {
             data: comment,
         });
     } catch (error) {
-        return res.status(404).json({
+        return res.status(500).json({
             message: error.message,
         });
     }
@@ -71,7 +70,7 @@ export const updateComment = async function (req, res) {
     try {
         const comment = await Comment.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!comment) {
-            return res.status(400).json({
+            return res.status(404).json({
                 message: "Cập nhật bình luận không thành công",
             });
         }
@@ -80,7 +79,7 @@ export const updateComment = async function (req, res) {
             data: comment,
         });
     } catch (error) {
-        return res.status(404).json({
+        return res.status(500).json({
             message: error.message,
         });
     }
@@ -93,7 +92,7 @@ export const removeComment = async function (req, res) {
             comment,
         });
     } catch (error) {
-        return res.status(404).json({
+        return res.status(500).json({
             message: error.message,
         });
     }

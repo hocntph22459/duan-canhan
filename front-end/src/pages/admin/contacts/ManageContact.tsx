@@ -1,28 +1,34 @@
-import { Table, Button, Empty, Input } from 'antd';
+import { Table, Button, Empty, Input, message } from 'antd';
 import Swal from 'sweetalert2';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import IContact from '../../../types/contact';
-type Props = {
-  contacts: IContact[]
-  Onremove: (id: string) => void
-}
-const ManageContact = (props: Props) => {
+import { GetAllContact, RemoveContact } from '../../../api/contact';
+
+const ManageContact = () => {
   const [Search, setSeach] = useState("");
-  const HandleRemove = async (id: string) => {
-    Swal.fire({
-      title: 'Bạn có muốn xóa?',
-      text: 'Bạn sẽ không thể hoàn nguyên điều này!',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Xóa',
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        props.Onremove(id)
+      // api contact 
+      const [contacts, setcontacts] = useState<IContact[]>([])
+      useEffect(() => {
+          GetAllContact().then(({ data }) => setcontacts(data.data))
+      }, [])
+      const HandleRemoveContact = async (id: string) => {
+          const key = 'loading';
+          try {
+              const loading = await message.loading({ content: 'đang xử lý!', key, duration: 2 });
+              if (loading) {
+                  const response = await RemoveContact(id);
+                  if (response)
+                      message.success(response.data.message, 3);
+                  GetAllContact().then(({ data }) => setcontacts(data.data))
+              }
+          } catch (error: any) {
+              if (error.response) {
+                  message.error(error.response.data.message, 5);
+              } else {
+                  message.error('Có lỗi xảy ra, vui lòng thử lại sau.', 5);
+              }
+          }
       }
-    });
-  }
   const columns = [
     {
       title: '#',
@@ -66,12 +72,12 @@ const ManageContact = (props: Props) => {
     {
       title: 'action',
       render: (item: IContact) => <>
-        <Button onClick={() => HandleRemove(item.key)}>delete</Button>
+        <Button className='bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded' onClick={() => HandleRemoveContact(item.key)}>delete</Button>
       </>
     },
   ];
 
-  const listData = props.contacts.map(item => {
+  const listData = contacts.map(item => {
     return {
       key: item._id,
       name: item.name,
